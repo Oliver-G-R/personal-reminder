@@ -17,13 +17,12 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, hour, onPress, img }
       onPress={onPress}
       style={ style.card}>
 
-        {/* {img && <Image
+        {img && <Image
             source={img}
-            // style={style.image}
             style={{
-              height: 200,
+              height: 200
             }}
-        />} */}
+        />}
 
         <View style={style.containerInfo}>
           <Text style={style.textCard}>

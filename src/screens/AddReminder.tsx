@@ -1,14 +1,13 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, View, Keyboard, Platform } from 'react-native'
+import { StyleSheet, Text, TextInput, View, Keyboard, Platform, TouchableWithoutFeedback } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import { FAB } from '../components/FAB'
 import InputScrollView from 'react-native-input-scroll-view'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { getDate, getTitle } from '../helpers/reminder'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../MyStackNavigation'
-
+import { PopUpModalOptions } from './PopUpModalOptions'
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 
 export const AddReminder = ({ navigation }:IAddReminder) => {
@@ -19,31 +18,24 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
 
   })
   const [focus, setFocus] = useState(false)
-  const [mode, setMode] = useState('date')
-  const [show, setShow] = useState(false)
 
-  const showMode = (currentMode: string) => {
-    setShow(true)
-    setMode(currentMode)
-  }
+  const [isOpen, setOpen] = useState(false)
 
-  const showDatepicker = () => {
-    showMode('date')
-  }
-
-  const showTimepicker = () => {
-    showMode('time')
-  }
-
-  const onChange = (selectedDate:any) => {
-    console.log(selectedDate)
-    const currentDate = selectedDate
-    setShow(Platform.OS === 'ios')
-    setReminder({ ...reminder, date: currentDate })
-  }
+  const options = [
+    {
+      event: () => setOpen(true),
+      name: 'Compartir',
+      IconElement: () => <Icon
+        name="share"
+        type="material-community"
+        color="#e8eeef"
+        size={30}
+        tvParallaxProperties={undefined} />
+    }
+  ]
 
   useEffect(() => {
-    navigation?.setOptions({
+    navigation.setOptions({
       headerRight (props: HeaderButtonProps): ReactNode {
         if (focus) {
           return (
@@ -62,12 +54,12 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
         } else {
           return (
           <Icon
-            name="export-variant"
+            name="dots-horizontal"
             type="material-community"
             color={props.tintColor}
             size={30}
             tvParallaxProperties={undefined}
-            onPress={() => console.log('Pressed')}
+            onPress={() => setOpen(true)}
           />
           )
         }
@@ -76,58 +68,54 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
   }, [focus])
 
   useEffect(() => {
-    navigation?.setOptions({
+    navigation.setOptions({
       title: getTitle(reminder.fullReminder).trim() || 'Agregar recordatorio'
     })
   }, [reminder.fullReminder])
 
   return (
-     <>
-        <InputScrollView
-          showsVerticalScrollIndicator={false}
-        >
-         <View>
-           {/*  <Button onPress={showDatepicker} title="Show date picker!" />
-            <Button onPress={showTimepicker} title="Show time picker!" />
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={mode === 'date' ? reminder.date : reminder.time}
-                mode={mode as any}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
+    <>
+      <InputScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <View>
+          <TextInput
+            style={style.textInputDescription}
+            value={reminder.fullReminder}
+            placeholderTextColor="#777786"
+            onFocus={() => {
+              setFocus(true)
+              setOpen(false)
+            }}
+            autoFocus={true}
+            onBlur={() => setFocus(false)}
+            multiline
+            onChangeText={(value) => setReminder({ ...reminder, fullReminder: value })}
               />
-            )} */}
-            <TextInput
-              style={style.textInputDescription}
-              value={reminder.fullReminder}
-              placeholderTextColor="#777786"
-              onFocus={() => setFocus(true)}
-              autoFocus={true}
-              onBlur={() => setFocus(false)}
-              multiline
-              onChangeText={(value) => setReminder({ ...reminder, fullReminder: value })}
-               />
 
-              <View style={{
-                height: 100
-              }} />
-         </View>
-        </InputScrollView>
+            <View style={{
+              height: 100
+            }} />
+        </View>
+      </InputScrollView>
 
-        <FAB
-          onPress={() => console.log('Pressed')}
-          Icon={
-            () => <Icon
-            name="content-save"
-            type="material-community"
-            color="#fff"
-            size={30}
-            tvParallaxProperties={undefined} />
-          }
-        />
-     </>
+      {isOpen && <PopUpModalOptions
+        options={options}
+        setIsOpen={setOpen}
+      />}
+
+      <FAB
+        onPress={() => console.log('Pressed')}
+        Icon={
+          () => <Icon
+          name="content-save"
+          type="material-community"
+          color="#fff"
+          size={30}
+          tvParallaxProperties={undefined} />
+        }
+      />
+    </>
   )
 }
 
