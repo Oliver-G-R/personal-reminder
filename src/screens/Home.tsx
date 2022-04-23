@@ -1,42 +1,39 @@
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import { Icon } from "react-native-elements"
-import { FAB } from "../components/FAB"
-import { GridCard } from "../components/GridCard"
-import { RootStackParamList } from '../MyStackNavigation';
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { Icon } from 'react-native-elements'
+import { FAB } from '../components/FAB'
+import { GridCard } from '../components/GridCard'
+import { RootStackParamList } from '../MyStackNavigation'
 
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 
 export const Home = ({ navigation }:IHome) => {
-
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
-    let yOffset = e.nativeEvent.contentOffset.y;
-    if(yOffset > 0) {
+    const yOffset = e.nativeEvent.contentOffset.y
+    if (yOffset > 0) {
       navigation.setOptions({
         headerTitle: 'Recordatorios',
         headerStyle: {
-          backgroundColor: '#e8eeef',
-        },
+          backgroundColor: '#e8eeef'
+        }
       })
-
-    }else {
+    } else {
       navigation.setOptions({
         headerTitle: '',
         headerStyle: {
-          backgroundColor: '#F6FAFB',
-        },
+          backgroundColor: '#F6FAFB'
+        }
       })
     }
   }
 
-
   return (
     <>
-      <ScrollView 
+      <ScrollView
         onScroll={e => onScrollEvent(e)}
         scrollEventThrottle={16}
-        contentInsetAdjustmentBehavior="automatic" 
+        contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
         >
           <View style={style.contentMessageWelcome}>
@@ -47,15 +44,15 @@ export const Home = ({ navigation }:IHome) => {
           <GridCard />
       </ScrollView>
       <FAB
-        onPress={() => navigation.navigate("AddReminder") }
+        onPress={() => navigation.navigate('AddReminder') }
         Icon={
           () => <Icon
           name="plus"
           type="material-community"
           color="#fff"
-          size={30} 
+          size={30}
           tvParallaxProperties={undefined} />
-        } 
+        }
       />
     </>
   )
@@ -64,19 +61,19 @@ export const Home = ({ navigation }:IHome) => {
 const style = StyleSheet.create({
   contentMessageWelcome: {
     width: '90%',
-    marginBottom: 20,
+    marginBottom: 20
   },
   title: {
     fontSize: 35,
     color: '#212837',
     // marginTop: 30,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
 
   description: {
     fontSize: 20,
     color: '#212837',
-    marginTop: 10,
+    marginTop: 10
   }
 
 })
