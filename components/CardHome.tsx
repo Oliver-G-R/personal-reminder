@@ -14,15 +14,15 @@ export const CardHome = ({title, color, hour, onPress, img }:CardHomeProps) => {
     <TouchableOpacity  
       activeOpacity={0.9} 
       onPress={onPress}
-      style={[{backgroundColor: color }, style.card]}>
+      style={ style.card}>
 
-        {img && <Image 
+        {/* {img && <Image 
             source={img}
             // style={style.image}
             style={{ 
               height: 200,
             }}
-        />}
+        />} */}
 
         <View style={style.containerInfo}>
           <Text style={style.textCard}>
@@ -40,7 +40,8 @@ const style = StyleSheet.create({
         borderRadius: 10,
         marginHorizontal: 5,
         marginBottom: 10,
-        shadowColor: '#171717',
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#1717176a',
         elevation: 5,
         shadowOffset: {width: -2, height: 4},
         shadowOpacity: 0.2,
@@ -51,12 +52,12 @@ const style = StyleSheet.create({
     },
 
     textCard:{
-        color: '#fff',
+        color: '#433836',
         fontSize: 20,
         fontWeight: 'bold',
     },
     hour:{
-        color: '#fff',
+        color: '#433836',
         fontSize: 20,
         padding: 2,
         marginTop: 5,

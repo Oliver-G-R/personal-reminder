@@ -1,15 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { Icon } from "react-native-elements"
+import { StyleSheet, TouchableOpacity } from "react-native"
 
-export const FAB = () => {
+interface IFAB{
+  onPress: () => void
+  Icon:React.FunctionComponent
+}
+
+export const FAB = ({Icon, onPress}:IFAB) => {
   return (
-    <TouchableOpacity activeOpacity={0.9} style={style.fab}>
-        <Icon
-            name="plus"
-            type="font-awesome"
-            color="#fff"
-            size={30} 
-            tvParallaxProperties={undefined} />
+    <TouchableOpacity 
+      onPress={onPress}  
+      activeOpacity={0.9} 
+      style={style.fab}>
+        <Icon/>
     </TouchableOpacity>
   )
 }
@@ -24,7 +26,12 @@ const style = StyleSheet.create({
         right: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#03A9F4',
+        backgroundColor: '#FF7461',
         borderRadius: 30,
+        shadowColor: '#1717176a',
+        elevation: 5,
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
     },
 })
