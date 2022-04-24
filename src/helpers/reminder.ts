@@ -4,17 +4,13 @@ const getTitle = (reminder:string):string => {
   return title
 }
 
-// obtener la fecha despues de la palabra #fecha
-const getDate = (reminder:string):string => {
-  const lines = reminder.split('\n')
-  const date = lines.find(line => line.includes('#fecha'))
-  if (date) {
-    return date.replace('#fecha', '')
-  }
-  return ''
-}
+const getUUID = ():string =>
+  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
 
 export {
   getTitle,
-  getDate
+  getUUID
 }
