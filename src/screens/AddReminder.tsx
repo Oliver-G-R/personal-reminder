@@ -1,6 +1,6 @@
-import { ReactNode, useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, View, Keyboard, Platform, TouchableWithoutFeedback } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { ReactNode, useContext, useEffect, useState } from 'react'
+import { StyleSheet, TextInput, View, Keyboard } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { FAB } from '../components/FAB'
 import InputScrollView from 'react-native-input-scroll-view'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
@@ -8,6 +8,8 @@ import { getDate, getTitle } from '../helpers/reminder'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../MyStackNavigation'
 import { PopUpModalOptions } from './PopUpModalOptions'
+import { OptionsAddReminder } from '../components/OptionsAddReminder'
+
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 
 export const AddReminder = ({ navigation }:IAddReminder) => {
@@ -20,19 +22,6 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
   const [focus, setFocus] = useState(false)
 
   const [isOpen, setOpen] = useState(false)
-
-  const options = [
-    {
-      event: () => setOpen(true),
-      name: 'Compartir',
-      IconElement: () => <Icon
-        name="share"
-        type="material-community"
-        color="#e8eeef"
-        size={30}
-        tvParallaxProperties={undefined} />
-    }
-  ]
 
   useEffect(() => {
     navigation.setOptions({
@@ -75,34 +64,39 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
 
   return (
     <>
-      <InputScrollView
-        showsVerticalScrollIndicator={false}
-      >
-        <View>
-          <TextInput
-            style={style.textInputDescription}
-            value={reminder.fullReminder}
-            placeholderTextColor="#777786"
-            onFocus={() => {
-              setFocus(true)
-              setOpen(false)
-            }}
-            autoFocus={true}
-            onBlur={() => setFocus(false)}
-            multiline
-            onChangeText={(value) => setReminder({ ...reminder, fullReminder: value })}
-              />
+      <View style={{
+        padding: 15
+      }}>
+        <InputScrollView
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
+            <TextInput
+              style={style.textInputDescription}
+              value={reminder.fullReminder}
+              placeholderTextColor="#777786"
+              onFocus={() => {
+                setFocus(true)
+                setOpen(false)
+              }}
+              autoFocus={true}
+              onBlur={() => setFocus(false)}
+              multiline
+              onChangeText={(value) => setReminder({ ...reminder, fullReminder: value })}
+                />
 
-            <View style={{
-              height: 100
-            }} />
-        </View>
-      </InputScrollView>
+              <View style={{
+                height: 100
+              }} />
+          </View>
+        </InputScrollView>
+      </View>
 
       {isOpen && <PopUpModalOptions
-        options={options}
-        setIsOpen={setOpen}
-      />}
+        setIsOpen={setOpen}>
+        <OptionsAddReminder/>
+      </PopUpModalOptions>
+      }
 
       <FAB
         onPress={() => console.log('Pressed')}
@@ -120,14 +114,12 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
 }
 
 const style = StyleSheet.create({
-
   textInputDescription: {
-    color: '#777786',
+    color: '#fff',
     height: '100%',
     minHeight: '100%',
     marginBottom: 10,
     textAlignVertical: 'top',
     fontSize: 20
   }
-
 })

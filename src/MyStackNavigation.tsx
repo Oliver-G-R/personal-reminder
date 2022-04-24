@@ -1,7 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Home } from './screens/Home'
 import { AddReminder } from './screens/AddReminder'
-import { Icon } from 'react-native-elements'
+import { useContext } from 'react'
+import { ThemeColorContext } from './context/ThemeColorContext'
 
 export type RootStackParamList = {
     Home: undefined;
@@ -10,11 +11,14 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
-export const StackNavigation = () => (
+export const StackNavigation = () => {
+  const { color } = useContext(ThemeColorContext)
+
+  return (
     <Stack.Navigator
         screenOptions={{
           headerShadowVisible: false,
-          headerTintColor: '#FF7461',
+          headerTintColor: '#fff',
           headerBackTitleVisible: false,
           headerTitleAlign: 'left',
 
@@ -40,10 +44,17 @@ export const StackNavigation = () => (
 
         <Stack.Screen
             options={{
-              title: 'Agregar recordatorio'
+              title: 'Agregar recordatorio',
+              headerTintColor: color?.color.tintColor,
+              headerStyle: {
+                backgroundColor: color?.color.colorTheme
+              },
+              contentStyle: {
+                backgroundColor: color?.color.colorTheme
+              }
             }}
-
             name="AddReminder"
             component={AddReminder} />
     </Stack.Navigator>
-)
+  )
+}

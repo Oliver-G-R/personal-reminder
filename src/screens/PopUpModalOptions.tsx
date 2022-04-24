@@ -1,20 +1,11 @@
 import { FC } from 'react'
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface IPopUpModalOptions {
   setIsOpen: (isOpen: boolean) => void
-  options: {
-    event: Function;
-    name: string,
-    IconElement: FC
-  }[]
 }
 
-export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, options }) => {
-  const handdlePress = (event: Function) => {
-    event()
-    setIsOpen(false)
-  }
+export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }) => {
   return (
     <Modal
       animationType="fade"
@@ -23,25 +14,20 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, options })
        <View
         style={{
           flex: 1,
-          backgroundColor: 'rgba(0,0,0,0.6)'
+          backgroundColor: 'rgba(0, 0, 0, 0.5)'
         }}>
+
           <View
             style={style.container}>
-              <FlatList
-                data={options}
+              <TouchableOpacity
+                style={style.donebtn}
+                onPress={() => setIsOpen(false)}
+                activeOpacity={0.8}>
+                <Text style={style.doneText}>Listo</Text>
+              </TouchableOpacity>
+              <ScrollView
                 showsVerticalScrollIndicator={false}
-                keyExtractor={(item, index): string => index.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    style={style.option}
-                    onPress={() => handdlePress(item.event)}
-                    >
-                    <Text style={style.optionName}>{item.name}</Text>
-                    <item.IconElement/>
-                  </TouchableOpacity>
-                )}
-              />
+              >{ children }</ScrollView>
           </View>
        </View>
     </Modal>
@@ -51,27 +37,22 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, options })
 const style = StyleSheet.create({
   container: {
     width: '100%',
-    height: '20%',
+    height: '35%',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     padding: 15,
     position: 'absolute',
-    backgroundColor: '#e8eeef',
+    backgroundColor: '#fff',
     bottom: 0
   },
 
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 5
+  doneText: {
+    fontSize: 19,
+    marginBottom: 10,
+    color: '#000'
   },
 
-  optionName: {
-    fontSize: 20,
-    color: '#000'
+  donebtn: {
+    width: 60
   }
 })
