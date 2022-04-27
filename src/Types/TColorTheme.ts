@@ -1,11 +1,9 @@
-type Tcolor = '#78d788' | '#cc81e3' | '#81e3d4' | '#e38181' | '#e3a681'
-type TtintColor = '#61ad6e' | '#9a63aa' | '#62aba0' | '#a76262' | '#9c7156'
+type Tcolor = '#F6FAFB' | '#78d788' | '#cc81e3' | '#81e3d4' | '#e38181' | '#e3a681'
+type TtintColor = '#000' | '#61ad6e' | '#9a63aa' | '#62aba0' | '#a76262' | '#9c7156'
 
 interface IThemeColor {
-    color: {
-      tintColor: TtintColor,
-      colorTheme: Tcolor
-    }
+  tintColor: TtintColor,
+  colorTheme: Tcolor
 }
 
 export {

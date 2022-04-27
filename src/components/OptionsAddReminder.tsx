@@ -1,9 +1,11 @@
+import { FC, useContext, useState } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ThemeColorContext } from '../context/ThemeColorContext'
-import { useContext } from 'react'
+interface IOptionsAddReminder {
+}
 
-export const OptionsAddReminder = () => {
+export const OptionsAddReminder:FC<IOptionsAddReminder> = () => {
   const { disponibleColors, setColorTheme, color } = useContext(ThemeColorContext)
 
   return (
@@ -56,15 +58,16 @@ export const OptionsAddReminder = () => {
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             activeOpacity={0.8}
-                            style={[style.round, { backgroundColor: item.color.colorTheme }]}
+                            style={[style.round, { backgroundColor: item.colorTheme }, item.colorTheme === '#F6FAFB' && style.borderRadius]}
                             onPress={() => setColorTheme(item)}>
 
-                            { item.color.colorTheme === color?.color.colorTheme && <View style={style.selected}></View>}
+                            { item.colorTheme === color.colorTheme && <View style={style.selected}></View>}
                         </TouchableOpacity>
                     )}
                 />
           </View>
           <TouchableOpacity
+            onPress={() => {}}
             activeOpacity={0.8}
             style={style.option}
           >
@@ -102,7 +105,7 @@ const style = StyleSheet.create({
   option: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F6FAFB',
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,
     marginBottom: 5
@@ -115,7 +118,6 @@ const style = StyleSheet.create({
     width: 32,
     borderRadius: 110,
     alignItems: 'center',
-
     justifyContent: 'center',
     marginRight: 15,
     backgroundColor: '#FFFFFF'
@@ -129,6 +131,11 @@ const style = StyleSheet.create({
     height: 16,
     borderRadius: 55,
     backgroundColor: '#fff'
+  },
+
+  borderRadius: {
+    borderWidth: 2,
+    borderColor: '#212837'
   }
 
 })

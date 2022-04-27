@@ -1,11 +1,11 @@
-import { Tcolor } from './TColorTheme'
+import { IThemeColor } from './TColorTheme'
 
 interface IReminderData {
     titile: string
     fullReminder: string
     date: Date
     time: Date
-    color: Tcolor
+    color: IThemeColor
     id:string
 }
 

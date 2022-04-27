@@ -1,4 +1,5 @@
-import { createContext, FC, useState } from 'react'
+import { createContext, FC, useEffect } from 'react'
+import { useAsyncStorage } from '../hooks/useAsyncStorage'
 import { IReminderData } from '../Types/TReminder'
 
 interface IReminderControlContext {
@@ -8,12 +9,23 @@ interface IReminderControlContext {
     reminder: IReminderData[]
 }
 
-export const ReminderControlContext = createContext<Partial<IReminderControlContext>>({})
+const defaultState:IReminderControlContext = {
+  createReminder: () => {},
+  updateReminder: () => {},
+  removeReminder: () => {},
+  reminder: []
+}
+
+export const ReminderControlContext = createContext<IReminderControlContext>(defaultState)
 
 export const ReminderControlProvider:FC = ({ children }) => {
-  const [reminder, setReminder] = useState<IReminderData[]>()
+  const [reminder, setReminder] = useAsyncStorage<IReminderData[]>({ key: 'reminder', initialValue: [] })
 
-  const createReminder = (reminder:IReminderData) => {}
+  const createReminder = (reminderData:IReminderData) => {
+    setReminder([...reminder, reminderData])
+  }
+
+  useEffect(() => console.log(reminder), [reminder])
 
   const updateReminder = (id: string) => {}
 

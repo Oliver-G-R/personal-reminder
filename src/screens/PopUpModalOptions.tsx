@@ -42,7 +42,7 @@ const style = StyleSheet.create({
     borderTopStartRadius: 20,
     padding: 15,
     position: 'absolute',
-    backgroundColor: '#fff',
+    backgroundColor: '#F6FAFB',
     bottom: 0
   },
 

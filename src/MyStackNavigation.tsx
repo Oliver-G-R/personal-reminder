@@ -18,7 +18,7 @@ export const StackNavigation = () => {
     <Stack.Navigator
         screenOptions={{
           headerShadowVisible: false,
-          headerTintColor: '#fff',
+          headerTintColor: '#000',
           headerBackTitleVisible: false,
           headerTitleAlign: 'left',
 
@@ -45,12 +45,12 @@ export const StackNavigation = () => {
         <Stack.Screen
             options={{
               title: 'Agregar recordatorio',
-              headerTintColor: color?.color.tintColor,
+              headerTintColor: color.tintColor,
               headerStyle: {
-                backgroundColor: color?.color.colorTheme
+                backgroundColor: color.colorTheme
               },
               contentStyle: {
-                backgroundColor: color?.color.colorTheme
+                backgroundColor: color.colorTheme
               }
             }}
             name="AddReminder"
