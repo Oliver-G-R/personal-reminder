@@ -3,9 +3,10 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { Icon } from 'react-native-elements'
 import { ThemeColorContext } from '../context/ThemeColorContext'
 interface IOptionsAddReminder {
+  setOpenPicker: (value: boolean) => void
 }
 
-export const OptionsAddReminder:FC<IOptionsAddReminder> = () => {
+export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) => {
   const { disponibleColors, setColorTheme, color } = useContext(ThemeColorContext)
 
   return (
@@ -67,7 +68,7 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = () => {
                 />
           </View>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => setOpenPicker(true)}
             activeOpacity={0.8}
             style={style.option}
           >

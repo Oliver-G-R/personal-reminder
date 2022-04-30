@@ -11,7 +11,7 @@ import { PopUpModalOptions } from './PopUpModalOptions'
 import { OptionsAddReminder } from '../components/OptionsAddReminder'
 import { ReminderControlContext } from '../context/ReminderControlProvider'
 import { ThemeColorContext } from '../context/ThemeColorContext'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 export interface IstateReminder {
@@ -31,9 +31,9 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
   const [focus, setFocus] = useState(false)
 
   const [isOpen, setOpen] = useState(false)
-
   const { createReminder } = useContext(ReminderControlContext)
   const { color } = useContext(ThemeColorContext)
+  const [isOpenPicker, setOpenPicker] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -82,11 +82,19 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
     })
   }
 
+  const onChangeDate = (date?:Date) => {
+    if (Platform.OS === 'android') setOpenPicker(false)
+    setReminder({
+      ...reminder,
+      date: date || new Date()
+    })
+  }
+
   const saveReminder = () => {
     createReminder({
       fullReminder: reminder.fullReminder.replace(reminder.title, '').trim(),
       titile: reminder.title,
-      date: new Date(),
+      date: reminder.date,
       time: new Date(),
       color,
       id: getUUID()
@@ -124,9 +132,21 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
         </InputScrollView>
       </View>
 
+      {
+        isOpenPicker && (
+          <DateTimePicker
+            value={reminder.date}
+            mode={'date'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour={true}
+            onChange={(_, date) => onChangeDate(date)}
+        />
+        )
+      }
+
       {isOpen && <PopUpModalOptions
         setIsOpen={setOpen}>
-        <OptionsAddReminder />
+        <OptionsAddReminder setOpenPicker={setOpenPicker} />
       </PopUpModalOptions>
       }
 
