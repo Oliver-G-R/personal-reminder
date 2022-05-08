@@ -1,28 +1,23 @@
 import { FC } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity, ImageSourcePropType } from 'react-native'
-import { Image } from 'react-native-elements'
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { NavigationProps } from '../Types/NavigationType'
+import { IReminderData } from '../Types/TReminder'
 
 interface ICardHomeProps {
-  title: string;
-  img: ImageSourcePropType;
-  onPress?: () => void;
-  hour: string;
-  color: string;
+  title: IReminderData['title'];
+  hour: IReminderData['time'];
+  color: IReminderData['color'];
+  id: IReminderData['id']
 }
 
-export const CardHome:FC<ICardHomeProps> = ({ title, color, hour, onPress, img }) => {
+export const CardHome:FC<ICardHomeProps> = ({ title, color, hour, id }) => {
+  const navigation = useNavigation<NavigationProps>()
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={onPress}
+      onPress={() => navigation.navigate('AddReminder', { currentId: id })}
       style={ style.card}>
-
-        {img && <Image
-            source={img}
-            style={{
-              height: 200
-            }}
-        />}
 
         <View style={style.containerInfo}>
           <Text style={style.textCard}>

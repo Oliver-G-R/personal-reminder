@@ -6,21 +6,17 @@ import InputScrollView from 'react-native-input-scroll-view'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { getTitle, getUUID } from '../helpers/reminder'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../MyStackNavigation'
 import { PopUpModalOptions } from './PopUpModalOptions'
 import { OptionsAddReminder } from '../components/OptionsAddReminder'
 import { ReminderControlContext } from '../context/ReminderControlProvider'
 import { ThemeColorContext } from '../context/ThemeColorContext'
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import { RootStackParamList } from '../Types/NavigationType'
+import { IstateReminder } from '../Types/TReminder'
 
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
-export interface IstateReminder {
-  title: string
-  fullReminder: string
-  date: Date
-  time : Date
-}
-export const AddReminder = ({ navigation }:IAddReminder) => {
+
+export const AddReminder = ({ navigation, route }:IAddReminder) => {
   const [reminder, setReminder] = useState<IstateReminder>({
     fullReminder: '',
     date: new Date(),
@@ -29,11 +25,12 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
   })
 
   const [focus, setFocus] = useState(false)
-
   const [isOpen, setOpen] = useState(false)
-  const { createReminder } = useContext(ReminderControlContext)
-  const { color } = useContext(ThemeColorContext)
   const [isOpenPicker, setOpenPicker] = useState(false)
+  const [existCurrentId, setExistCurrentId] = useState<string>()
+
+  const { createReminder, reminders: remindersData } = useContext(ReminderControlContext)
+  const { color } = useContext(ThemeColorContext)
 
   useEffect(() => {
     navigation.setOptions({
@@ -74,6 +71,21 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
     })
   }, [reminder.title])
 
+  useEffect(() => {
+    const { params } = route
+    const currentId = params?.currentId
+
+    if (currentId) {
+      setExistCurrentId(currentId)
+      const { date, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IstateReminder
+      console.log(date, reminder.date)
+      setReminder({
+        ...rest,
+        date
+      })
+    }
+  }, [])
+
   const handleChange = (value:any, name:string) => {
     setReminder({
       ...reminder,
@@ -92,13 +104,15 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
 
   const saveReminder = () => {
     createReminder({
-      fullReminder: reminder.fullReminder.replace(reminder.title, '').trim(),
-      titile: reminder.title,
+      fullReminder: reminder.fullReminder,
+      title: reminder.title,
       date: reminder.date,
       time: new Date(),
       color,
       id: getUUID()
     })
+
+    navigation.navigate('Home')
   }
   return (
     <>
@@ -154,7 +168,7 @@ export const AddReminder = ({ navigation }:IAddReminder) => {
         onPress={() => saveReminder()}
         Icon={
           () => <Icon
-          name="content-save"
+          name={existCurrentId ? 'pencil' : 'content-save'}
           type="material-community"
           color="#fff"
           size={30}

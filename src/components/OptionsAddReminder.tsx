@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react'
+import { FC, useContext } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ThemeColorContext } from '../context/ThemeColorContext'

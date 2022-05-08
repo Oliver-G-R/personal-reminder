@@ -4,7 +4,7 @@ import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollE
 import { Icon } from 'react-native-elements'
 import { FAB } from '../components/FAB'
 import { GridCard } from '../components/GridCard'
-import { RootStackParamList } from '../MyStackNavigation'
+import { RootStackParamList } from '../Types/NavigationType'
 
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 

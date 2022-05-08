@@ -6,26 +6,26 @@ interface IReminderControlContext {
     createReminder: (reminder:IReminderData) => void
     updateReminder: (id: string) => void
     removeReminder: (id: string) => void
-    reminder: IReminderData[]
+    reminders: IReminderData[]
 }
 
 const defaultState:IReminderControlContext = {
   createReminder: () => {},
   updateReminder: () => {},
   removeReminder: () => {},
-  reminder: []
+  reminders: []
 }
 
 export const ReminderControlContext = createContext<IReminderControlContext>(defaultState)
 
 export const ReminderControlProvider:FC = ({ children }) => {
-  const [reminder, setReminder] = useAsyncStorage<IReminderData[]>({ key: 'reminder', initialValue: [] })
+  const [reminders, setReminders] = useAsyncStorage<IReminderData[]>({ key: 'reminder', initialValue: [] })
 
   const createReminder = (reminderData:IReminderData) => {
-    setReminder([...reminder, reminderData])
+    setReminders([...reminders, reminderData])
   }
 
-  useEffect(() => console.log(reminder), [reminder])
+  useEffect(() => console.log(reminders), [reminders])
 
   const updateReminder = (id: string) => {}
 
@@ -33,7 +33,7 @@ export const ReminderControlProvider:FC = ({ children }) => {
 
   return (
         <ReminderControlContext.Provider value={{
-          reminder,
+          reminders,
           createReminder,
           updateReminder,
           removeReminder

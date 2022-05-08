@@ -3,11 +3,7 @@ import { Home } from './screens/Home'
 import { AddReminder } from './screens/AddReminder'
 import { useContext } from 'react'
 import { ThemeColorContext } from './context/ThemeColorContext'
-
-export type RootStackParamList = {
-    Home: undefined;
-    AddReminder: undefined;
-};
+import { RootStackParamList } from './Types/NavigationType'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
