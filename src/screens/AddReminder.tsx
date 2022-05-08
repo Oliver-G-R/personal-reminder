@@ -78,13 +78,12 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
     if (currentId) {
       setExistCurrentId(currentId)
       const { date, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IstateReminder
-      console.log(date, reminder.date)
       setReminder({
         ...rest,
-        date
+        date: new Date(date)
       })
     }
-  }, [])
+  }, [route.params?.currentId])
 
   const handleChange = (value:any, name:string) => {
     setReminder({
