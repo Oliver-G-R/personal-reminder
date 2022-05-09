@@ -19,12 +19,9 @@ export const FAB:FC<IFAB> = ({ Icon, onPress }) => {
 
 const style = StyleSheet.create({
   fab: {
-    position: 'absolute',
     width: 60,
     height: 60,
-    zIndex: 1,
-    bottom: 30,
-    right: 10,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FF7461',

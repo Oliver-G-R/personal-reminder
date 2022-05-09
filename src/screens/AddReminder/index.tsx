@@ -1,18 +1,19 @@
-import { ReactNode, useEffect, useState, useContext } from 'react'
-import { StyleSheet, TextInput, View, Keyboard, Platform } from 'react-native'
+import { ReactNode, useEffect, useState, useContext, Children, cloneElement } from 'react'
+import { StyleSheet, TextInput, View, Keyboard, Platform, Text } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { FAB } from '../components/FAB'
+import { FAB } from '../../components/FAB'
 import InputScrollView from 'react-native-input-scroll-view'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
-import { getTitle, getUUID } from '../helpers/reminder'
+import { getTitle, getUUID } from '../../helpers/reminder'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { PopUpModalOptions } from './PopUpModalOptions'
-import { OptionsAddReminder } from '../components/OptionsAddReminder'
-import { ReminderControlContext } from '../context/ReminderControlProvider'
-import { ThemeColorContext } from '../context/ThemeColorContext'
+import { PopUpModalOptions } from '../PopUpModalOptions'
+import { OptionsAddReminder } from './OptionsAddReminder'
+import { ReminderControlContext } from '../../context/ReminderControlProvider'
+import { ThemeColorContext } from '../../context/ThemeColorContext'
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
-import { RootStackParamList } from '../Types/NavigationType'
-import { IstateReminder } from '../Types/TReminder'
+import { RootStackParamList } from '../../Types/NavigationType'
+import { IstateReminder } from '../../Types/TReminder'
+import { ContainerFAB } from '../../components/ContainerFAB'
 
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 
@@ -157,23 +158,26 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
         )
       }
 
-      {isOpen && <PopUpModalOptions
-        setIsOpen={setOpen}>
-        <OptionsAddReminder setOpenPicker={setOpenPicker} />
-      </PopUpModalOptions>
-      }
-
-      <FAB
-        onPress={() => saveReminder()}
-        Icon={
-          () => <Icon
-          name={existCurrentId ? 'pencil' : 'content-save'}
-          type="material-community"
-          color="#fff"
-          size={30}
-          tvParallaxProperties={undefined} />
-        }
+      <OptionsAddReminder
+        setOpenPicker={setOpenPicker}
+        setOpen={setOpen}
+        isOpen={isOpen}
+        currentId={existCurrentId}
       />
+
+      <ContainerFAB>
+        <FAB
+          onPress={() => saveReminder()}
+          Icon={
+            () => <Icon
+            name={existCurrentId ? 'pencil' : 'content-save'}
+            type="material-community"
+            color="#fff"
+            size={30}
+            tvParallaxProperties={undefined} />
+          }
+        />
+      </ContainerFAB>
     </>
   )
 }

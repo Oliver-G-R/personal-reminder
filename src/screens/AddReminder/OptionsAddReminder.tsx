@@ -1,19 +1,32 @@
 import { FC, useContext } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { ThemeColorContext } from '../context/ThemeColorContext'
+import { ThemeColorContext } from '../../context/ThemeColorContext'
+import { ReminderControlContext } from '../../context/ReminderControlProvider'
+import { useNavigation } from '@react-navigation/native'
+import { NavigationProps } from '../../Types/NavigationType'
+import { PopUpModalOptions } from '../PopUpModalOptions'
 interface IOptionsAddReminder {
-  setOpenPicker: (value: boolean) => void
+  setOpenPicker: (value: boolean) => void,
+  currentId?: string,
+  isOpen: boolean,
+  setOpen: (value: boolean) => void
 }
 
-export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) => {
+export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, currentId, setOpen, isOpen }) => {
+  const { removeReminder } = useContext(ReminderControlContext)
   const { disponibleColors, setColorTheme, color } = useContext(ThemeColorContext)
+  const navigation = useNavigation<NavigationProps>()
 
-  return (
-       <>
+  const onPressRemoveReminder = () => {
+    navigation.goBack()
+    removeReminder(currentId as string)
+  }
+
+  return isOpen
+    ? (
+       <PopUpModalOptions setIsOpen={setOpen}>
           <TouchableOpacity
-            activeOpacity={0.8}
-            style={style.option}
           >
               <Icon
                 name="share"
@@ -26,23 +39,22 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) =>
                 Compartir
               </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={style.option}
+          {currentId && <TouchableOpacity
+          onPress={() => onPressRemoveReminder()}
           >
               <Icon
                 name="delete"
                 type="material-community"
                 style={style.icon}
-                color="#212837"
+                color="#f24d4d"
                 size={30}
                 tvParallaxProperties={undefined} />
-              <Text style={style.optionText}>
+              <Text style={[style.optionText, { color: '#f24d4d' }]}>
                 Eliminar
               </Text>
-          </TouchableOpacity>
-          <View
-            style={style.option}
+          </TouchableOpacity>}
+          <TouchableOpacity
+
           >
               <Icon
                 name="palette"
@@ -58,7 +70,6 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) =>
                     data={disponibleColors}
                     renderItem={({ item }) => (
                         <TouchableOpacity
-                            activeOpacity={0.8}
                             style={[style.round, { backgroundColor: item.colorTheme }, item.colorTheme === '#F6FAFB' && style.borderRadius]}
                             onPress={() => setColorTheme(item)}>
 
@@ -66,11 +77,9 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) =>
                         </TouchableOpacity>
                     )}
                 />
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setOpenPicker(true)}
-            activeOpacity={0.8}
-            style={style.option}
           >
               <Icon
                 name="calendar-range"
@@ -84,8 +93,6 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) =>
               </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            activeOpacity={0.8}
-            style={style.option}
           >
               <Icon
                 name="alarm-multiple"
@@ -98,19 +105,12 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker }) =>
                 Hora
               </Text>
           </TouchableOpacity>
-       </>
-  )
+       </PopUpModalOptions>
+      )
+    : null
 }
 
 const style = StyleSheet.create({
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 5
-  },
   icon: {
     marginRight: 10
   },

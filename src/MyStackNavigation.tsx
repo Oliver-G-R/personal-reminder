@@ -32,8 +32,8 @@ export const StackNavigation = () => {
             options={{
               headerSearchBarOptions: {
                 placeholder: 'Buscar'
-              }
-
+              },
+              title: ''
             }}
             name="Home"
             component={Home} />

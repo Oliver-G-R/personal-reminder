@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { Children, FC, PropsWithChildren, ReactElement, cloneElement } from 'react'
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface IPopUpModalOptions {
@@ -27,7 +27,19 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }
               </TouchableOpacity>
               <ScrollView
                 showsVerticalScrollIndicator={false}
-              >{ children }</ScrollView>
+                >
+                {
+                  children && Children.map(children, child => {
+                    const item = child as ReactElement
+
+                    return child && cloneElement(item, {
+                      style: [style.option],
+                      activeOpacity: 0.8
+                    })
+                  })
+                }
+
+              </ScrollView>
           </View>
        </View>
     </Modal>
@@ -37,7 +49,7 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }
 const style = StyleSheet.create({
   container: {
     width: '100%',
-    height: '35%',
+    height: '30%',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     padding: 15,
@@ -54,5 +66,14 @@ const style = StyleSheet.create({
 
   donebtn: {
     width: 60
+  },
+
+  option: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 5
   }
 })

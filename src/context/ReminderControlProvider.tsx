@@ -7,12 +7,14 @@ interface IReminderControlContext {
     updateReminder: (id: string) => void
     removeReminder: (id: string) => void
     reminders: IReminderData[]
+    removeAllReminders: () => void
 }
 
 const defaultState:IReminderControlContext = {
   createReminder: () => {},
   updateReminder: () => {},
   removeReminder: () => {},
+  removeAllReminders: () => {},
   reminders: []
 }
 
@@ -29,14 +31,19 @@ export const ReminderControlProvider:FC = ({ children }) => {
 
   const updateReminder = (id: string) => {}
 
-  const removeReminder = (id: string) => {}
+  const removeReminder = (id: string) =>
+    setReminders(reminders.filter(rmd => rmd.id !== id))
+
+  const removeAllReminders = () =>
+    setReminders([])
 
   return (
         <ReminderControlContext.Provider value={{
           reminders,
           createReminder,
           updateReminder,
-          removeReminder
+          removeReminder,
+          removeAllReminders
         }}>
             {children}
         </ReminderControlContext.Provider>
