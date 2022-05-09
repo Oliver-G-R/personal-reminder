@@ -30,9 +30,6 @@ export const StackNavigation = () => {
         initialRouteName='Home'>
         <Stack.Screen
             options={{
-              headerSearchBarOptions: {
-                placeholder: 'Buscar'
-              },
               title: ''
             }}
             name="Home"

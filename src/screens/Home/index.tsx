@@ -1,6 +1,6 @@
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, Keyboard, TextInputFocusEventData } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { FAB } from '../../components/FAB'
 import { GridCard } from '../../components/GridCard'
@@ -15,6 +15,8 @@ interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 
 export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
+  const [search, setSearch] = useState('')
+
   const { removeAllReminders } = useContext(ReminderControlContext)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -49,6 +51,11 @@ export const Home = ({ navigation }:IHome) => {
           onPress={() => setOpen(true)}
         />
         )
+      },
+      headerSearchBarOptions: {
+        placeholder: 'Buscar',
+        onChangeText: (e:NativeSyntheticEvent<TextInputFocusEventData>) =>
+          setSearch(e.nativeEvent.text)
       }
     }
     )
@@ -57,6 +64,7 @@ export const Home = ({ navigation }:IHome) => {
   return (
     <>
       <ScrollView
+        keyboardDismissMode='on-drag'
         onScroll={e => onScrollEvent(e)}
         scrollEventThrottle={16}
         contentInsetAdjustmentBehavior="automatic"
@@ -67,8 +75,9 @@ export const Home = ({ navigation }:IHome) => {
               Todos tus recordatorios en un solo lugar.
             </Text>
           </View>
-          <GridCard />
+          <GridCard search={search}/>
       </ScrollView>
+
       {isOpen && <PopUpModalOptions
         setIsOpen={setOpen}>
           <TouchableOpacity onPress={removeAllReminders} ><Text>Eliminar todo</Text></TouchableOpacity>
