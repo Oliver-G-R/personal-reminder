@@ -29,6 +29,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
   const [isOpen, setOpen] = useState(false)
   const [isOpenPicker, setOpenPicker] = useState(false)
   const [existCurrentId, setExistCurrentId] = useState<string>()
+  const [modePicker, setModePicker] = useState<'date' | 'time'>('date')
 
   const { createReminder, reminders: remindersData } = useContext(ReminderControlContext)
   const { color } = useContext(ThemeColorContext)
@@ -78,9 +79,10 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
 
     if (currentId) {
       setExistCurrentId(currentId)
-      const { date, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IstateReminder
+      const { date, time, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IstateReminder
       setReminder({
         ...rest,
+        time: new Date(time),
         date: new Date(date)
       })
     }
@@ -94,11 +96,19 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
     })
   }
 
-  const onChangeDate = (date?:Date) => {
+  const onChangeDate = (date?:any) => {
     if (Platform.OS === 'android') setOpenPicker(false)
     setReminder({
       ...reminder,
       date: date || new Date()
+    })
+  }
+
+  const onChangeTime = (time?:any) => {
+    if (Platform.OS === 'android') setOpenPicker(false)
+    setReminder({
+      ...reminder,
+      time: time || new Date()
     })
   }
 
@@ -107,7 +117,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       fullReminder: reminder.fullReminder,
       title: reminder.title,
       date: reminder.date,
-      time: new Date(),
+      time: reminder.time,
       color,
       id: getUUID()
     })
@@ -149,11 +159,13 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       {
         isOpenPicker && (
           <DateTimePicker
-            value={reminder.date}
-            mode={'date'}
+            value={modePicker === 'date' ? reminder.date : reminder.time}
+            mode={modePicker}
             display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            is24Hour={true}
-            onChange={(_, date) => onChangeDate(date)}
+            is24Hour={false}
+            onChange={(_, date) =>
+              modePicker === 'date' ? onChangeDate(date) : onChangeTime(date)
+            }
         />
         )
       }
@@ -161,6 +173,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       <OptionsAddReminder
         setOpenPicker={setOpenPicker}
         setOpen={setOpen}
+        setModePicker={setModePicker}
         isOpen={isOpen}
         currentId={existCurrentId}
       />

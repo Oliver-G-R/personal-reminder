@@ -7,13 +7,14 @@ import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '../../Types/NavigationType'
 import { PopUpModalOptions } from '../PopUpModalOptions'
 interface IOptionsAddReminder {
-  setOpenPicker: (value: boolean) => void,
-  currentId?: string,
-  isOpen: boolean,
+  setOpenPicker: (value: boolean) => void
+  currentId?: string
+  isOpen: boolean
   setOpen: (value: boolean) => void
+  setModePicker: (value: 'date' | 'time') => void
 }
 
-export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, currentId, setOpen, isOpen }) => {
+export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, currentId, setOpen, isOpen, setModePicker }) => {
   const { removeReminder } = useContext(ReminderControlContext)
   const { disponibleColors, setColorTheme, color } = useContext(ThemeColorContext)
   const navigation = useNavigation<NavigationProps>()
@@ -79,7 +80,10 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
                 />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setOpenPicker(true)}
+            onPress={() => {
+              setModePicker('date')
+              setOpenPicker(true)
+            }}
           >
               <Icon
                 name="calendar-range"
@@ -93,6 +97,10 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
               </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => {
+              setModePicker('time')
+              setOpenPicker(true)
+            }}
           >
               <Icon
                 name="alarm-multiple"

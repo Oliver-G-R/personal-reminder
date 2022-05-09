@@ -36,6 +36,20 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
               }
             </Text>
           </View>
+          <View style={style.containerTime}>
+            <Text style={style.icon}>🕛</Text>
+            <Text style={style.infoData}>
+              {
+               /* transform to time 12 hor format */
+                new Date(time).toLocaleTimeString('es-ES', {
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  hour12: true
+                })
+
+              }
+            </Text>
+          </View>
         </View>
     </TouchableOpacity>
   )
