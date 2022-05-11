@@ -6,11 +6,10 @@ import InputScrollView from 'react-native-input-scroll-view'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { getTitle, getUUID } from '../../helpers/reminder'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { PopUpModalOptions } from '../PopUpModalOptions'
 import { OptionsAddReminder } from './OptionsAddReminder'
 import { ReminderControlContext } from '../../context/ReminderControlProvider'
 import { ThemeColorContext } from '../../context/ThemeColorContext'
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import { RootStackParamList } from '../../Types/NavigationType'
 import { IstateReminder } from '../../Types/TReminder'
 import { ContainerFAB } from '../../components/ContainerFAB'
@@ -31,7 +30,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
   const [existCurrentId, setExistCurrentId] = useState<string>()
   const [modePicker, setModePicker] = useState<'date' | 'time'>('date')
 
-  const { createReminder, reminders: remindersData } = useContext(ReminderControlContext)
+  const { createReminder, reminders: remindersData, updateReminder } = useContext(ReminderControlContext)
   const { color } = useContext(ThemeColorContext)
 
   useEffect(() => {
@@ -113,14 +112,19 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
   }
 
   const saveReminder = () => {
-    createReminder({
-      fullReminder: reminder.fullReminder,
-      title: reminder.title,
-      date: reminder.date,
-      time: reminder.time,
-      color,
-      id: getUUID()
-    })
+    if (existCurrentId) {
+      updateReminder(existCurrentId as string, {
+        ...reminder,
+        color,
+        id: getUUID()
+      })
+    } else {
+      createReminder({
+        ...reminder,
+        color,
+        id: getUUID()
+      })
+    }
 
     navigation.navigate('Home')
   }

@@ -80,7 +80,9 @@ export const Home = ({ navigation }:IHome) => {
 
       {isOpen && <PopUpModalOptions
         setIsOpen={setOpen}>
-          <TouchableOpacity onPress={removeAllReminders} ><Text>Eliminar todo</Text></TouchableOpacity>
+          <TouchableOpacity onPress={removeAllReminders} >
+            <Text style={style.optionText} >Eliminar todo</Text>
+          </TouchableOpacity>
       </PopUpModalOptions>
       }
       <ContainerFAB>
@@ -104,6 +106,10 @@ const style = StyleSheet.create({
   contentMessageWelcome: {
     width: '90%',
     marginBottom: 20
+  },
+  optionText: {
+    fontSize: 16,
+    color: '#212837'
   },
   title: {
     fontSize: 35,

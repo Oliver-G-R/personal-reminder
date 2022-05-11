@@ -4,7 +4,7 @@ import { IReminderData } from '../Types/TReminder'
 
 interface IReminderControlContext {
     createReminder: (reminder:IReminderData) => void
-    updateReminder: (id: string) => void
+    updateReminder: (id: string, data:IReminderData) => void
     removeReminder: (id: string) => void
     reminders: IReminderData[]
     removeAllReminders: () => void
@@ -29,7 +29,15 @@ export const ReminderControlProvider:FC = ({ children }) => {
 
   useEffect(() => console.log(reminders), [reminders])
 
-  const updateReminder = (id: string) => {}
+  const updateReminder = (id: string, data:IReminderData) => {
+    setReminders(reminders.map(reminder => {
+      if (reminder.id === id) {
+        return { ...reminder, ...data }
+      }
+
+      return reminder
+    }))
+  }
 
   const removeReminder = (id: string) =>
     setReminders(reminders.filter(rmd => rmd.id !== id))
