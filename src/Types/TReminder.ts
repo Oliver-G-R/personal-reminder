@@ -3,8 +3,8 @@ import { IThemeColor } from './TColorTheme'
 interface IReminderData {
     title: string
     fullReminder: string
-    date: Date
-    time: Date
+    date: Date | null
+    time: Date | null
     color: IThemeColor
     id:string
 }
@@ -12,8 +12,8 @@ interface IReminderData {
 interface IstateReminder {
   title: string
   fullReminder: string
-  date: Date
-  time : Date
+  date: Date | null
+  time : Date | null
 }
 
 export {

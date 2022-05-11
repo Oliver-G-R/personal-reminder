@@ -24,7 +24,7 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
           <Text style={style.textCard}>
               {title}
           </Text>
-          <View style={style.containerTime}>
+          {date && <View style={style.containerTime}>
             <Text style={style.icon}>📅</Text>
             <Text style={style.infoData}>
               {
@@ -35,8 +35,8 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
                 })
               }
             </Text>
-          </View>
-          <View style={style.containerTime}>
+          </View>}
+         {time && <View style={style.containerTime}>
             <Text style={style.icon}>🕛</Text>
             <Text style={style.infoData}>
               {
@@ -49,7 +49,7 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
 
               }
             </Text>
-          </View>
+          </View>}
         </View>
     </TouchableOpacity>
   )

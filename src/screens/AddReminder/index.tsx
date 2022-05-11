@@ -11,16 +11,17 @@ import { ReminderControlContext } from '../../context/ReminderControlProvider'
 import { ThemeColorContext } from '../../context/ThemeColorContext'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { RootStackParamList } from '../../Types/NavigationType'
-import { IstateReminder } from '../../Types/TReminder'
+import { IReminderData, IstateReminder } from '../../Types/TReminder'
 import { ContainerFAB } from '../../components/ContainerFAB'
+import { IThemeColor } from '../../Types/TColorTheme'
 
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 
 export const AddReminder = ({ navigation, route }:IAddReminder) => {
   const [reminder, setReminder] = useState<IstateReminder>({
     fullReminder: '',
-    date: new Date(),
-    time: new Date(),
+    date: null,
+    time: null,
     title: ''
   })
 
@@ -31,7 +32,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
   const [modePicker, setModePicker] = useState<'date' | 'time'>('date')
 
   const { createReminder, reminders: remindersData, updateReminder } = useContext(ReminderControlContext)
-  const { color } = useContext(ThemeColorContext)
+  const { color, setColorTheme } = useContext(ThemeColorContext)
 
   useEffect(() => {
     navigation.setOptions({
@@ -78,14 +79,20 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
 
     if (currentId) {
       setExistCurrentId(currentId)
-      const { date, time, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IstateReminder
+      const { date, time, color, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IReminderData
+      setColorTheme(color)
       setReminder({
         ...rest,
-        time: new Date(time),
-        date: new Date(date)
+        time: time && new Date(time),
+        date: date && new Date(date)
+      })
+    } else {
+      setColorTheme({
+        colorTheme: '#F6FAFB',
+        tintColor: '#000'
       })
     }
-  }, [route.params?.currentId])
+  }, [])
 
   const handleChange = (value:any, name:string) => {
     setReminder({
@@ -113,7 +120,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
 
   const saveReminder = () => {
     if (existCurrentId) {
-      updateReminder(existCurrentId as string, {
+      updateReminder(existCurrentId, {
         ...reminder,
         color,
         id: getUUID()
@@ -163,7 +170,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       {
         isOpenPicker && (
           <DateTimePicker
-            value={modePicker === 'date' ? reminder.date : reminder.time}
+            value={modePicker === 'date' ? reminder.date || new Date() : reminder.time || new Date()}
             mode={modePicker}
             display={Platform.OS === 'ios' ? 'spinner' : 'default'}
             is24Hour={false}

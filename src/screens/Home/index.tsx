@@ -61,6 +61,11 @@ export const Home = ({ navigation }:IHome) => {
     )
   }, [])
 
+  const removeAllRemindersOption = () => {
+    removeAllReminders()
+    setOpen(false)
+  }
+
   return (
     <>
       <ScrollView
@@ -80,7 +85,7 @@ export const Home = ({ navigation }:IHome) => {
 
       {isOpen && <PopUpModalOptions
         setIsOpen={setOpen}>
-          <TouchableOpacity onPress={removeAllReminders} >
+          <TouchableOpacity onPress={removeAllRemindersOption} >
             <Text style={style.optionText} >Eliminar todo</Text>
           </TouchableOpacity>
       </PopUpModalOptions>
