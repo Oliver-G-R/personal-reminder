@@ -7,6 +7,7 @@ interface IReminderData {
     time: Date | null
     color: IThemeColor
     id:string
+    identifierNotification:string | undefined
 }
 
 interface IstateReminder {

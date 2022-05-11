@@ -3,16 +3,19 @@ import { StackNavigation } from './MyStackNavigation'
 import { NavigationContainer } from '@react-navigation/native'
 import { ThemeColorProvider } from './context/ThemeColorContext'
 import { ReminderControlProvider } from './context/ReminderControlProvider'
+import { PushNotificationProvider } from './context/PushNotificationProvider'
 
 export default function App () {
   return (
     <NavigationContainer>
-     <ReminderControlProvider>
-       <ThemeColorProvider>
-          <StackNavigation />
-          <StatusBar style="auto" />
-       </ThemeColorProvider>
-     </ReminderControlProvider>
+    <PushNotificationProvider>
+      <ReminderControlProvider>
+        <ThemeColorProvider>
+            <StackNavigation />
+            <StatusBar style="auto" />
+        </ThemeColorProvider>
+      </ReminderControlProvider>
+    </PushNotificationProvider>
     </NavigationContainer>
   )
 }

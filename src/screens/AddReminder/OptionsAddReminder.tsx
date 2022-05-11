@@ -6,6 +6,7 @@ import { ReminderControlContext } from '../../context/ReminderControlProvider'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '../../Types/NavigationType'
 import { PopUpModalOptions } from '../PopUpModalOptions'
+import { PushNotificationContext } from '../../context/PushNotificationProvider'
 interface IOptionsAddReminder {
   setOpenPicker: (value: boolean) => void
   currentId?: string
@@ -15,12 +16,15 @@ interface IOptionsAddReminder {
 }
 
 export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, currentId, setOpen, isOpen, setModePicker }) => {
-  const { removeReminder } = useContext(ReminderControlContext)
+  const { removeReminder, reminders } = useContext(ReminderControlContext)
+  const { cancelPushNotification } = useContext(PushNotificationContext)
   const { disponibleColors, setColorTheme, color } = useContext(ThemeColorContext)
   const navigation = useNavigation<NavigationProps>()
 
-  const onPressRemoveReminder = () => {
+  const onPressRemoveReminder = async () => {
     navigation.goBack()
+    const identifier = reminders.find(item => item.id === currentId)?.identifierNotification as string
+    await cancelPushNotification(identifier)
     removeReminder(currentId as string)
   }
 

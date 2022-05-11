@@ -1,4 +1,4 @@
-import { Children, FC, PropsWithChildren, ReactElement, cloneElement } from 'react'
+import { Children, FC, ReactElement, cloneElement } from 'react'
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface IPopUpModalOptions {

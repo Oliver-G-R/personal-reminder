@@ -1,10 +1,7 @@
 import { useEffect, ReactNode, useState, useContext } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, TextInputFocusEventData, Alert, Platform } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, TextInputFocusEventData, Platform, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
-import * as Notifications from 'expo-notifications'
-import * as Devise from 'expo-device'
-import moment from 'moment'
 import { FAB } from '../../components/FAB'
 import { GridCard } from '../../components/GridCard'
 import { RootStackParamList } from '../../Types/NavigationType'
@@ -12,20 +9,14 @@ import { ContainerFAB } from '../../components/ContainerFAB'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { PopUpModalOptions } from '../PopUpModalOptions'
 import { ReminderControlContext } from '../../context/ReminderControlProvider'
+import { PushNotificationContext } from '../../context/PushNotificationProvider'
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true
-  })
-})
 
 export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState('')
 
+  const { cancelAllPushNotifications } = useContext(PushNotificationContext)
   const { removeAllReminders } = useContext(ReminderControlContext)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -46,7 +37,6 @@ export const Home = ({ navigation }:IHome) => {
       })
     }
   }
-
   useEffect(() => {
     navigation.setOptions({
       headerLeft (props: HeaderButtonProps): ReactNode {
@@ -70,42 +60,11 @@ export const Home = ({ navigation }:IHome) => {
     )
   }, [])
 
-  const removeAllRemindersOption = () => {
+  const removeAllRemindersOption = async () => {
     removeAllReminders()
+    await cancelAllPushNotifications()
     setOpen(false)
   }
-
-  const reggisertForPushNotifications = async () => {
-    let token
-    if (Devise.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync()
-      let finalStatus = existingStatus
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync()
-        finalStatus = status
-      }
-      if (finalStatus !== 'granted') {
-        Alert.alert('No se pudo registrar la notificación')
-      }
-      token = (await Notifications.getExpoPushTokenAsync()).data
-    }
-
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C'
-      })
-    }
-
-    return token
-  }
-
-  useEffect(() => {
-    reggisertForPushNotifications().then(token => {
-    })
-  }, [])
 
   return (
     <>
