@@ -27,8 +27,6 @@ export const ReminderControlProvider:FC = ({ children }) => {
     setReminders([...reminders, reminderData])
   }
 
-  useEffect(() => console.log(reminders), [reminders])
-
   const updateReminder = (id: string, data:IReminderData) => {
     setReminders(reminders.map(reminder => {
       if (reminder.id === id) {

@@ -27,7 +27,7 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
   return isOpen
     ? (
        <PopUpModalOptions setIsOpen={setOpen}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
           >
               <Icon
                 name="share"
@@ -39,7 +39,7 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
               <Text style={style.optionText}>
                 Compartir
               </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {currentId && <TouchableOpacity
           onPress={() => onPressRemoveReminder()}
           >

@@ -1,10 +1,11 @@
-import { ReactNode, useEffect, useState, useContext, Children, cloneElement } from 'react'
-import { StyleSheet, TextInput, View, Keyboard, Platform, Text } from 'react-native'
+import { ReactNode, useEffect, useState, useContext } from 'react'
+import { StyleSheet, TextInput, View, Keyboard, Platform, Alert } from 'react-native'
+import * as Notifications from 'expo-notifications'
 import { Icon } from 'react-native-elements'
 import { FAB } from '../../components/FAB'
 import InputScrollView from 'react-native-input-scroll-view'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
-import { getTitle, getUUID } from '../../helpers/reminder'
+import { getTitle, getUUID, validateDate } from '../../helpers/reminder'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { OptionsAddReminder } from './OptionsAddReminder'
 import { ReminderControlContext } from '../../context/ReminderControlProvider'
@@ -13,7 +14,6 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { RootStackParamList } from '../../Types/NavigationType'
 import { IReminderData, IstateReminder } from '../../Types/TReminder'
 import { ContainerFAB } from '../../components/ContainerFAB'
-import { IThemeColor } from '../../Types/TColorTheme'
 
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 
@@ -118,22 +118,68 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
     })
   }
 
-  const saveReminder = () => {
-    if (existCurrentId) {
-      updateReminder(existCurrentId, {
-        ...reminder,
-        color,
-        id: getUUID()
-      })
-    } else {
-      createReminder({
-        ...reminder,
-        color,
-        id: getUUID()
-      })
+  const saveReminder = async () => {
+    const reminderObjet:IReminderData = {
+      id: getUUID(),
+      title: reminder.title,
+      fullReminder: reminder.fullReminder,
+      date: reminder.date,
+      time: reminder.time,
+      color
     }
 
-    navigation.navigate('Home')
+    if (reminderObjet.title.trim().length !== 0) {
+      if (existCurrentId) {
+        if (reminderObjet.date !== null) {
+          if (validateDate(reminderObjet.date as Date)) {
+            updateReminder(existCurrentId, reminderObjet)
+            if (reminderObjet.date !== null && reminderObjet.time !== null) {
+              await scheduleNotification(reminderObjet)
+            }
+            navigation.navigate('Home')
+          } else Alert.alert('Error', 'La fecha no puede ser menor a la actual')
+        } else {
+          updateReminder(existCurrentId, reminderObjet)
+          navigation.navigate('Home')
+        }
+      } else {
+        if (reminderObjet.date !== null) {
+          if (validateDate(reminderObjet.date as Date)) {
+            createReminder(reminderObjet)
+            if (reminderObjet.date !== null && reminderObjet.time !== null) {
+              await scheduleNotification(reminderObjet)
+            }
+            navigation.navigate('Home')
+          } else Alert.alert('Error', 'La fecha no puede ser menor a la actual')
+        } else {
+          createReminder(reminderObjet)
+          navigation.navigate('Home')
+        }
+      }
+    } else Alert.alert('Error', 'El título no puede estar vacío')
+  }
+
+  const scheduleNotification = async (data:IReminderData) => {
+    const { date, time, title, fullReminder, color: { colorTheme } } = data
+    try {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title,
+          body: fullReminder,
+          color: colorTheme
+        },
+        trigger: {
+          hour: time?.getHours(),
+          minute: time?.getMinutes(),
+          repeats: false,
+          month: date?.getMonth(),
+          year: date?.getFullYear(),
+          day: date?.getDay()
+        }
+      })
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo agendar la notificación')
+    }
   }
   return (
     <>
@@ -154,7 +200,6 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
                 setFocus(true)
                 setOpen(false)
               }}
-              autoFocus={true}
               onBlur={() => setFocus(false)}
               multiline
               onChangeText={(value) => handleChange(value, 'fullReminder')}

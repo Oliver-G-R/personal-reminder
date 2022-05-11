@@ -1,3 +1,4 @@
+import moment from 'moment'
 const getTitle = (reminder:string):string => {
   const lines = reminder.split('\n')
   const title = lines.find(line => line.trim().length > 0) || ''
@@ -10,7 +11,17 @@ const getUUID = ():string =>
     return v.toString(16)
   })
 
+const validateDate = (date: Date):boolean => {
+  if (moment(date).isSame(moment(), 'day')) {
+    return true
+  } else if (moment(date).isAfter(moment())) {
+    return true
+  }
+
+  return false
+}
 export {
   getTitle,
-  getUUID
+  getUUID,
+  validateDate
 }
