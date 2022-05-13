@@ -1,23 +1,19 @@
-import { useEffect, ReactNode, useState, useContext } from 'react'
+import { useEffect, ReactNode, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, TextInputFocusEventData, Platform, Alert } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TextInputFocusEventData } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { FAB } from '../../components/FAB'
 import { GridCard } from '../../components/GridCard'
 import { RootStackParamList } from '../../Types/NavigationType'
 import { ContainerFAB } from '../../components/ContainerFAB'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
-import { PopUpModalOptions } from '../PopUpModalOptions'
-import { ReminderControlContext } from '../../context/ReminderControlProvider'
-import { PushNotificationContext } from '../../context/PushNotificationProvider'
+import { OptionsHome } from './OptionsHome'
+
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 
 export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState('')
-
-  const { cancelAllPushNotifications } = useContext(PushNotificationContext)
-  const { removeAllReminders } = useContext(ReminderControlContext)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = e.nativeEvent.contentOffset.y
@@ -60,12 +56,6 @@ export const Home = ({ navigation }:IHome) => {
     )
   }, [])
 
-  const removeAllRemindersOption = async () => {
-    removeAllReminders()
-    await cancelAllPushNotifications()
-    setOpen(false)
-  }
-
   return (
     <>
       <ScrollView
@@ -82,14 +72,10 @@ export const Home = ({ navigation }:IHome) => {
           </View>
           <GridCard search={search}/>
       </ScrollView>
-
-      {isOpen && <PopUpModalOptions
-        setIsOpen={setOpen}>
-          <TouchableOpacity onPress={removeAllRemindersOption} >
-            <Text style={style.optionText} >Eliminar todo</Text>
-          </TouchableOpacity>
-      </PopUpModalOptions>
-      }
+      <OptionsHome
+        setOpen={setOpen}
+        isOpen={isOpen}
+      />
       <ContainerFAB>
         <FAB
           onPress={() => navigation.navigate('AddReminder') }
@@ -112,10 +98,7 @@ const style = StyleSheet.create({
     width: '90%',
     marginBottom: 20
   },
-  optionText: {
-    fontSize: 16,
-    color: '#212837'
-  },
+
   title: {
     fontSize: 35,
     color: '#212837',
