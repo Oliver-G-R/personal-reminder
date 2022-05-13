@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react'
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ThemeColorContext } from '../../context/ThemeColorContext'
 import { ReminderControlContext } from '../../context/ReminderControlProvider'
@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '../../Types/NavigationType'
 import { PopUpModalOptions } from '../PopUpModalOptions'
 import { PushNotificationContext } from '../../context/PushNotificationProvider'
+import { IReminderData } from '../../Types/TReminder'
 interface IOptionsAddReminder {
   setOpenPicker: (value: boolean) => void
   currentId?: string
@@ -28,10 +29,42 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
     removeReminder(currentId as string)
   }
 
+  const shareReminder = async () => {
+    const finReminder = reminders.find(item => item.id === currentId) as IReminderData
+
+    const convertDateString = new Date(finReminder.date as Date).toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    })
+
+    const convertTimeString = new Date(finReminder.time as Date).toLocaleTimeString('es-ES', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    })
+
+    const template = `
+    ${finReminder.fullReminder}
+
+    🕐 ${convertDateString}
+    📅 ${convertTimeString}
+    `
+
+    try {
+      await Share.share({
+        message: template
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return isOpen
     ? (
        <PopUpModalOptions setIsOpen={setOpen}>
-          {/* <TouchableOpacity
+         {currentId && <TouchableOpacity
+            onPress={shareReminder}
           >
               <Icon
                 name="share"
@@ -43,7 +76,7 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
               <Text style={style.optionText}>
                 Compartir
               </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>}
           {currentId && <TouchableOpacity
           onPress={() => onPressRemoveReminder()}
           >
