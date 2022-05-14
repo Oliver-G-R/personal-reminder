@@ -1,12 +1,11 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { CardHome } from './CardHome'
+import { CardHome } from '@components/CardHome'
 import MasonryList from '@react-native-seoul/masonry-list'
-import { NoReminders } from './NoReminders'
+import { NoReminders } from '@components/NoReminders'
 import { useContext, useEffect, useState } from 'react'
-import { ReminderControlContext } from '../context/ReminderControlProvider'
-import { IReminderData } from '../Types/TReminder'
-import { CheckBox } from './CheckBox'
-import { useSearchFilter } from '../hooks/useSearchFilter'
+import { ReminderControlContext } from '@context/ReminderControlProvider'
+import { CheckBox } from '@components/CheckBox'
+import { useSearchFilter } from '@hooks/useSearchFilter'
 
 interface IGridCard {
   search: string,

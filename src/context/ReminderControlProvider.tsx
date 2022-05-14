@@ -1,6 +1,6 @@
 import { createContext, FC, useEffect, useState } from 'react'
-import { useAsyncStorage } from '../hooks/useAsyncStorage'
-import { IReminderData } from '../Types/TReminder'
+import { useAsyncStorage } from '@hooks/useAsyncStorage'
+import { IReminderData } from '@Types/TReminder'
 
 interface IReminderControlContext {
     createReminder: (reminder:IReminderData) => void

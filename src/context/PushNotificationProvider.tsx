@@ -1,8 +1,8 @@
 import { createContext, FC, useEffect } from 'react'
 import { Alert } from 'react-native'
 import * as Notifications from 'expo-notifications'
-import { IReminderData } from '../Types/TReminder'
-import { reggisertForPushNotifications } from '../helpers/notiffications'
+import { IReminderData } from '@Types/TReminder'
+import { reggisertForPushNotifications } from '@helpers/notiffications'
 
 /* Configuración de las notificaciones */
 Notifications.setNotificationHandler({

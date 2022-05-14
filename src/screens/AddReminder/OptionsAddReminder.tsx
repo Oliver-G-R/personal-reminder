@@ -1,19 +1,19 @@
-import { FC, useContext } from 'react'
+import { FC, useContext, SetStateAction, Dispatch } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { ThemeColorContext } from '../../context/ThemeColorContext'
-import { ReminderControlContext } from '../../context/ReminderControlProvider'
+import { ThemeColorContext } from '@context/ThemeColorContext'
+import { ReminderControlContext } from '@context/ReminderControlProvider'
 import { useNavigation } from '@react-navigation/native'
-import { NavigationProps } from '../../Types/NavigationType'
+import { NavigationProps } from '@Types/NavigationType'
 import { PopUpModalOptions } from '../PopUpModalOptions'
-import { PushNotificationContext } from '../../context/PushNotificationProvider'
-import { IReminderData } from '../../Types/TReminder'
+import { PushNotificationContext } from '@context/PushNotificationProvider'
+import { IReminderData } from '@Types/TReminder'
 interface IOptionsAddReminder {
-  setOpenPicker: (value: boolean) => void
+  setOpenPicker: Dispatch<SetStateAction<boolean>>
   currentId?: string
   isOpen: boolean
-  setOpen: (value: boolean) => void
-  setModePicker: (value: 'date' | 'time') => void
+  setOpen: Dispatch<SetStateAction<boolean>>
+  setModePicker: Dispatch<SetStateAction<'date' | 'time'>>
 }
 
 export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, currentId, setOpen, isOpen, setModePicker }) => {
@@ -24,8 +24,8 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
 
   const onPressRemoveReminder = async () => {
     navigation.goBack()
-    const identifier = reminders.find(item => item.id === currentId)?.identifierNotification as string
-    await cancelPushNotification(identifier)
+    const identifier = reminders.find(item => item.id === currentId)?.identifierNotification
+    identifier && await cancelPushNotification(identifier)
     removeReminder(currentId as string)
   }
 

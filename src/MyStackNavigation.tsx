@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Home } from './screens/Home'
-import { AddReminder } from './screens/AddReminder'
+import { Home } from '@screens/Home'
+import { AddReminder } from '@screens/AddReminder'
 import { useContext } from 'react'
-import { ThemeColorContext } from './context/ThemeColorContext'
-import { RootStackParamList } from './Types/NavigationType'
+import { ThemeColorContext } from '@context/ThemeColorContext'
+import { RootStackParamList } from '@Types/NavigationType'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 

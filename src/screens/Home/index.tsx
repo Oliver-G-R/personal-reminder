@@ -1,13 +1,14 @@
-import { useEffect, ReactNode, useState } from 'react'
+import { useEffect, ReactNode, useState, useContext } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TextInputFocusEventData } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { FAB } from '../../components/FAB'
-import { GridCard } from '../../components/GridCard'
-import { RootStackParamList } from '../../Types/NavigationType'
-import { ContainerFAB } from '../../components/ContainerFAB'
+import { FAB } from '@components/FAB'
+import { GridCard } from '@components/GridCard'
+import { RootStackParamList } from '@Types/NavigationType'
+import { ContainerFAB } from '@components/ContainerFAB'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { OptionsHome } from './OptionsHome'
+import { ReminderControlContext } from '@context/ReminderControlProvider'
 
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 
@@ -15,6 +16,7 @@ export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectListReminder, setSelectListReminder] = useState(false)
+  const { reminders } = useContext(ReminderControlContext)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = e.nativeEvent.contentOffset.y
@@ -34,6 +36,8 @@ export const Home = ({ navigation }:IHome) => {
       })
     }
   }
+
+  useEffect(() => { selectListReminder && setSelectListReminder(false) }, [reminders])
   useEffect(() => {
     navigation.setOptions({
       headerLeft (props: HeaderButtonProps): ReactNode {

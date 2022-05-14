@@ -1,5 +1,5 @@
 import { FC, useState, createContext, SetStateAction } from 'react'
-import { IThemeColor } from '../Types/TColorTheme'
+import { IThemeColor } from '@Types/TColorTheme'
 interface IThemeColorContext {
   setColorTheme: (color: IThemeColor) => void
   color: IThemeColor

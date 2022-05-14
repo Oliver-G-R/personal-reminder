@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { NavigationProps } from '../Types/NavigationType'
-import { IReminderData } from '../Types/TReminder'
+import { NavigationProps } from '@Types/NavigationType'
+import { IReminderData } from '@Types/TReminder'
 
 interface ICardHomeProps {
   title: IReminderData['title'];

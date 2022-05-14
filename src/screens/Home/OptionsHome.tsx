@@ -1,8 +1,8 @@
 import { PopUpModalOptions } from '../PopUpModalOptions'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Dispatch, SetStateAction, useContext } from 'react'
-import { ReminderControlContext } from '../../context/ReminderControlProvider'
-import { PushNotificationContext } from '../../context/PushNotificationProvider'
+import { ReminderControlContext } from '@context/ReminderControlProvider'
+import { PushNotificationContext } from '@context/PushNotificationProvider'
 import { Icon } from 'react-native-elements'
 
 interface IOptionsHome {
