@@ -1,4 +1,4 @@
-import { createContext, FC, useEffect } from 'react'
+import { createContext, FC, useEffect, useState } from 'react'
 import { useAsyncStorage } from '../hooks/useAsyncStorage'
 import { IReminderData } from '../Types/TReminder'
 
@@ -6,22 +6,44 @@ interface IReminderControlContext {
     createReminder: (reminder:IReminderData) => void
     updateReminder: (id: string, data:IReminderData) => void
     removeReminder: (id: string) => void
-    reminders: IReminderData[]
+    selectReminder: (reminderSelected:IReminderData) => void
     removeAllReminders: () => void
+    removeSelectedReminders: () => void
+    reminders: IReminderData[]
+    selectedReminders:IReminderData[]
 }
 
 const defaultState:IReminderControlContext = {
   createReminder: () => {},
   updateReminder: () => {},
   removeReminder: () => {},
+  selectReminder: () => {},
+  removeSelectedReminders: () => {},
   removeAllReminders: () => {},
-  reminders: []
+  reminders: [],
+  selectedReminders: []
 }
 
 export const ReminderControlContext = createContext<IReminderControlContext>(defaultState)
 
 export const ReminderControlProvider:FC = ({ children }) => {
   const [reminders, setReminders] = useAsyncStorage<IReminderData[]>({ key: 'reminder', initialValue: [] })
+
+  const [selectedReminders, setSelectedReminders] = useState<IReminderData[]>([])
+
+  const selectReminder = (reminderSelected:IReminderData) => {
+    const currentIdReminder = reminderSelected.id
+
+    const isExist = selectedReminders.some(item => item.id === currentIdReminder)
+
+    if (isExist) {
+      setSelectedReminders(selectedReminders.filter(item => item.id !== currentIdReminder))
+    } else {
+      setSelectedReminders([...selectedReminders, reminderSelected])
+    }
+  }
+
+  const removeSelectedReminders = () => setSelectedReminders([])
 
   const createReminder = (reminderData:IReminderData) => {
     setReminders([...reminders, reminderData])
@@ -45,11 +67,15 @@ export const ReminderControlProvider:FC = ({ children }) => {
 
   return (
         <ReminderControlContext.Provider value={{
-          reminders,
           createReminder,
           updateReminder,
           removeReminder,
-          removeAllReminders
+          removeAllReminders,
+          selectReminder,
+          removeSelectedReminders,
+
+          selectedReminders,
+          reminders
         }}>
             {children}
         </ReminderControlContext.Provider>

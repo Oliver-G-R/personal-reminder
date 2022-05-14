@@ -46,7 +46,6 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
                   minute: 'numeric',
                   hour12: true
                 })
-
               }
             </Text>
           </View>}
@@ -92,6 +91,7 @@ const style = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#f9f9f96f',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     borderRadius: 10,
     padding: 5
   }

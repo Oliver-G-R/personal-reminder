@@ -14,6 +14,7 @@ interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState('')
+  const [selectListReminder, setSelectListReminder] = useState(false)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = e.nativeEvent.contentOffset.y
@@ -70,10 +71,14 @@ export const Home = ({ navigation }:IHome) => {
               Todos tus recordatorios en un solo lugar.
             </Text>
           </View>
-          <GridCard search={search}/>
+          <GridCard
+            typeLayout="list"
+            select={selectListReminder}
+            search={search}/>
       </ScrollView>
       <OptionsHome
         setOpen={setOpen}
+        setSelectListReminder={setSelectListReminder}
         isOpen={isOpen}
       />
       <ContainerFAB>

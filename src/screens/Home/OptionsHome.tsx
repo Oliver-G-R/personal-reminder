@@ -1,15 +1,16 @@
 import { PopUpModalOptions } from '../PopUpModalOptions'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
-import { useContext } from 'react'
+import { Dispatch, SetStateAction, useContext } from 'react'
 import { ReminderControlContext } from '../../context/ReminderControlProvider'
 import { PushNotificationContext } from '../../context/PushNotificationProvider'
 import { Icon } from 'react-native-elements'
 
 interface IOptionsHome {
-    setOpen: (value: boolean) => void;
+    setOpen: Dispatch<SetStateAction<boolean>>
     isOpen: boolean;
+    setSelectListReminder: Dispatch<SetStateAction<boolean>>
 }
-export const OptionsHome = ({ setOpen, isOpen }:IOptionsHome) => {
+export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsHome) => {
   const { removeAllReminders } = useContext(ReminderControlContext)
   const { cancelAllPushNotifications } = useContext(PushNotificationContext)
 
@@ -31,6 +32,19 @@ export const OptionsHome = ({ setOpen, isOpen }:IOptionsHome) => {
                     size={30}
                     tvParallaxProperties={undefined} />
                 <Text style={style.optionText} >Eliminar todo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              setSelectListReminder(select => !select)
+              setOpen(false)
+            }}>
+                <Icon
+                    name="checkbox-marked-outline"
+                    type="material-community"
+                    style={style.icon}
+                    color="#212837"
+                    size={30}
+                    tvParallaxProperties={undefined} />
+                <Text style={style.optionText} >Seleccionar</Text>
             </TouchableOpacity>
         </PopUpModalOptions>
       )

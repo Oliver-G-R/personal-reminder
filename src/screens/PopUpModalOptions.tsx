@@ -1,8 +1,8 @@
-import { Children, FC, ReactElement, cloneElement } from 'react'
+import { Children, FC, ReactElement, cloneElement, Dispatch, SetStateAction } from 'react'
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface IPopUpModalOptions {
-  setIsOpen: (isOpen: boolean) => void
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
 export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }) => {
