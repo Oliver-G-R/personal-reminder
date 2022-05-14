@@ -223,14 +223,8 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       <ContainerFAB>
         <FAB
           onPress={() => saveReminder()}
-          Icon={
-            () => <Icon
-            name={existCurrentId ? 'pencil' : 'content-save'}
-            type="material-community"
-            color="#fff"
-            size={30}
-            tvParallaxProperties={undefined} />
-          }
+          name={existCurrentId ? 'pencil' : 'content-save'}
+          type="material-community"
         />
       </ContainerFAB>
     </>

@@ -1,18 +1,28 @@
 import { FC } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Icon } from 'react-native-elements'
 
 interface IFAB{
   onPress: () => void
-  Icon:FC
+  name: string
+  type: string
+  color?: string
+  size?:number
+
 }
 
-export const FAB:FC<IFAB> = ({ Icon, onPress }) => {
+export const FAB:FC<IFAB> = ({ onPress, name, type, color = '#fff', size = 30 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
       style={style.fab}>
-        <Icon/>
+      <Icon
+          name={name}
+          type={type}
+          color={color}
+          size={size}
+          tvParallaxProperties={undefined} />
     </TouchableOpacity>
   )
 }

@@ -84,14 +84,8 @@ export const Home = ({ navigation }:IHome) => {
       <ContainerFAB>
         <FAB
           onPress={() => navigation.navigate('AddReminder') }
-          Icon={
-            () => <Icon
-            name="plus"
-            type="material-community"
-            color="#fff"
-            size={30}
-            tvParallaxProperties={undefined} />
-          }
+          name="plus"
+          type="material-community"
         />
       </ContainerFAB>
     </>
