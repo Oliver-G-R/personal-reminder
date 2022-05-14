@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 import { ReminderControlContext } from '../context/ReminderControlProvider'
 import { IReminderData } from '../Types/TReminder'
 import { CheckBox } from './CheckBox'
+import { useSearchFilter } from '../hooks/useSearchFilter'
 
 interface IGridCard {
   search: string,
@@ -15,30 +16,16 @@ interface IGridCard {
 
 export const GridCard = ({ search, typeLayout, select }:IGridCard) => {
   const { reminders, selectReminder, removeSelectedReminders, selectedReminders } = useContext(ReminderControlContext)
+  const [filterData] = useSearchFilter(reminders, search)
 
   useEffect(() => removeSelectedReminders(), [select])
-
-  const filterData = () => {
-    if (search !== '') {
-      const freminder = reminders.filter(c => {
-        return Object.values(c)
-          .join(' ')
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      })
-
-      return freminder
-    }
-
-    return reminders
-  }
 
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}>
-      {filterData().length > 0
+      {filterData.length > 0
         ? <MasonryList
-            data={filterData()}
+            data={filterData}
             keyExtractor={(item): string => item.id}
             numColumns={typeLayout === 'list' ? 1 : 2}
             showsVerticalScrollIndicator={false}
