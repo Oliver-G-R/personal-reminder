@@ -1,5 +1,5 @@
 import { SetStateAction, Dispatch } from 'react'
-import { StyleSheet, Text, TextInput, TextInputFocusEventData, View, NativeSyntheticEvent } from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
 interface ISearch {
     setSearch: Dispatch<SetStateAction<string>>
 }

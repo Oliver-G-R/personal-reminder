@@ -1,12 +1,12 @@
 import { FC, useState, createContext, SetStateAction } from 'react'
-import { IThemeColor } from '@Types/TColorTheme'
-interface IThemeColorContext {
-  setColorTheme: (color: IThemeColor) => void
-  color: IThemeColor
-  disponibleColors: IThemeColor[]
+import { IThemeColorReminder } from '@Types/TColorThemeReminder'
+interface IColorThemeReminderContext {
+  setColorThemeReminder: (color: IThemeColorReminder) => void
+  color: IThemeColorReminder
+  disponibleColors: IThemeColorReminder[]
 }
 
-const disponibleColors:IThemeColor[] = [
+const disponibleColors:IThemeColorReminder[] = [
   {
     tintColor: '#000',
     colorTheme: '#F6FAFB'
@@ -33,27 +33,27 @@ const disponibleColors:IThemeColor[] = [
   }
 ]
 
-const defaultState: IThemeColorContext = {
-  setColorTheme: () => {},
+const defaultState: IColorThemeReminderContext = {
+  setColorThemeReminder: () => {},
   color: disponibleColors[0],
   disponibleColors
 }
 
-export const ThemeColorContext = createContext<IThemeColorContext>(defaultState)
+export const ColorThemeReminderContext = createContext<IColorThemeReminderContext>(defaultState)
 
-export const ThemeColorProvider:FC = ({ children }) => {
+export const ColorThemeReminderProvider:FC = ({ children }) => {
   const [color, setColor] = useState(disponibleColors[0])
 
-  const setColorTheme = (color:IThemeColor) =>
+  const setColorThemeReminder = (color:IThemeColorReminder) =>
     setColor(color)
 
   return (
-    <ThemeColorContext.Provider value={{
+    <ColorThemeReminderContext.Provider value={{
       color,
       disponibleColors,
-      setColorTheme
+      setColorThemeReminder
     }}>
         {children}
-    </ThemeColorContext.Provider>
+    </ColorThemeReminderContext.Provider>
   )
 }

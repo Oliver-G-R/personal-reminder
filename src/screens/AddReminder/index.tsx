@@ -8,7 +8,7 @@ import { getTitle, getUUID, validateDate } from '@helpers/reminder'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { OptionsAddReminder } from './OptionsAddReminder'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
-import { ThemeColorContext } from '@context/ThemeColorContext'
+import { ColorThemeReminderContext } from '@context/ThemeColorContext'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { RootStackParamList } from '@Types/NavigationType'
 import { IReminderData, IstateReminder } from '@Types/TReminder'
@@ -34,7 +34,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
 
   const { scheduleNotification, cancelPushNotification } = useContext(PushNotificationContext)
   const { createReminder, reminders: remindersData, updateReminder } = useContext(ReminderControlContext)
-  const { color, setColorTheme } = useContext(ThemeColorContext)
+  const { color, setColorThemeReminder } = useContext(ColorThemeReminderContext)
 
   useEffect(() => {
     navigation.setOptions({
@@ -83,14 +83,14 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       setExistCurrentId(currentId)
       const { date, time, color, identifierNotification, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IReminderData
       setCurrentIdentifierNotification(identifierNotification)
-      setColorTheme(color)
+      setColorThemeReminder(color)
       setReminder({
         ...rest,
         time: time && new Date(time),
         date: date && new Date(date)
       })
     } else {
-      setColorTheme({
+      setColorThemeReminder({
         colorTheme: '#F6FAFB',
         tintColor: '#000'
       })

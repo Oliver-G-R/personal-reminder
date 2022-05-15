@@ -1,11 +1,11 @@
 import { FC, useContext, SetStateAction, Dispatch } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { ThemeColorContext } from '@context/ThemeColorContext'
+import { ColorThemeReminderContext } from '@context/ThemeColorContext'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '@Types/NavigationType'
-import { PopUpModalOptions } from '../PopUpModalOptions'
+import { PopUpModalOptions } from '../../components/PopUpModalOptions'
 import { PushNotificationContext } from '@context/PushNotificationProvider'
 import { IReminderData } from '@Types/TReminder'
 interface IOptionsAddReminder {
@@ -19,7 +19,7 @@ interface IOptionsAddReminder {
 export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, currentId, setOpen, isOpen, setModePicker }) => {
   const { removeReminder, reminders } = useContext(ReminderControlContext)
   const { cancelPushNotification } = useContext(PushNotificationContext)
-  const { disponibleColors, setColorTheme, color } = useContext(ThemeColorContext)
+  const { disponibleColors, setColorThemeReminder, color } = useContext(ColorThemeReminderContext)
   const navigation = useNavigation<NavigationProps>()
 
   const onPressRemoveReminder = async () => {
@@ -109,7 +109,7 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             style={[style.round, { backgroundColor: item.colorTheme }, item.colorTheme === '#F6FAFB' && style.borderRadius]}
-                            onPress={() => setColorTheme(item)}>
+                            onPress={() => setColorThemeReminder(item)}>
 
                             { item.colorTheme === color.colorTheme && <View style={style.selected}></View>}
                         </TouchableOpacity>

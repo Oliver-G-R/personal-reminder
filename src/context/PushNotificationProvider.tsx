@@ -74,7 +74,7 @@ export const PushNotificationProvider:FC = ({ children }) => {
     try {
       await Notifications.cancelAllScheduledNotificationsAsync()
     } catch (error) {
-      Alert.alert('Error', 'No se pudo cancelar las notificaciones')
+      Alert.alert('Error', 'No se pudieron cancelar las notificaciones')
     }
   }
 

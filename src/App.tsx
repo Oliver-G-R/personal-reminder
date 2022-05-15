@@ -1,21 +1,25 @@
 import { StatusBar } from 'expo-status-bar'
 import { StackNavigation } from './MyStackNavigation'
-import { NavigationContainer } from '@react-navigation/native'
-import { ThemeColorProvider } from '@context/ThemeColorContext'
+import { ColorThemeReminderProvider } from '@context/ThemeColorContext'
 import { ReminderControlProvider } from '@context/ReminderControlProvider'
 import { PushNotificationProvider } from '@context/PushNotificationProvider'
+import { FC } from 'react'
 
 export default function App () {
   return (
-    <NavigationContainer>
-    <PushNotificationProvider>
-      <ReminderControlProvider>
-        <ThemeColorProvider>
-            <StackNavigation />
-            <StatusBar style="auto" />
-        </ThemeColorProvider>
-      </ReminderControlProvider>
-    </PushNotificationProvider>
-    </NavigationContainer>
+    <AppState>
+      <StackNavigation />
+      <StatusBar style="auto" />
+    </AppState>
   )
 }
+
+const AppState:FC = ({ children }) => (
+    <PushNotificationProvider>
+      <ReminderControlProvider>
+        <ColorThemeReminderProvider>
+          {children}
+        </ColorThemeReminderProvider>
+      </ReminderControlProvider>
+    </PushNotificationProvider>
+)

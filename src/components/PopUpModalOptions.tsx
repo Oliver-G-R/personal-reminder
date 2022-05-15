@@ -1,5 +1,5 @@
 import { Children, FC, ReactElement, cloneElement, Dispatch, SetStateAction } from 'react'
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 
 interface IPopUpModalOptions {

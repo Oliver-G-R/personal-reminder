@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 export const ContainerFAB:FC = ({ children }) => {
   return (

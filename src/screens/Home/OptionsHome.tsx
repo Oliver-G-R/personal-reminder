@@ -1,9 +1,11 @@
-import { PopUpModalOptions } from '../PopUpModalOptions'
+import { PopUpModalOptions } from '../../components/PopUpModalOptions'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Dispatch, SetStateAction, useContext } from 'react'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
 import { PushNotificationContext } from '@context/PushNotificationProvider'
 import { Icon } from 'react-native-elements'
+import { useNavigation } from '@react-navigation/native'
+import { NavigationProps } from '@Types/NavigationType'
 
 interface IOptionsHome {
     setOpen: Dispatch<SetStateAction<boolean>>
@@ -13,6 +15,7 @@ interface IOptionsHome {
 export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsHome) => {
   const { removeAllReminders, reminders } = useContext(ReminderControlContext)
   const { cancelAllPushNotifications } = useContext(PushNotificationContext)
+  const { navigate } = useNavigation<NavigationProps>()
 
   const removeAllRemindersOption = async () => {
     removeAllReminders()
@@ -46,7 +49,12 @@ export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsH
                     tvParallaxProperties={undefined} />
                 <Text style={style.optionText} >Seleccionar</Text>
             </TouchableOpacity>}
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setOpen(false)
+                navigate('Preferences')
+              }}
+            >
               <Icon
                 name="account-cog"
                 type="material-community"

@@ -7,4 +7,5 @@ export type RootStackParamList = {
     AddReminder: {
       currentId: string;
     } | undefined;
+    Preferences: undefined;
 };
