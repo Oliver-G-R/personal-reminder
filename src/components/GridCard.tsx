@@ -17,7 +17,7 @@ export const GridCard = ({ search, typeLayout, select }:IGridCard) => {
   const { reminders, selectReminder, removeSelectedReminders, selectedReminders } = useContext(ReminderControlContext)
   const [filterData] = useSearchFilter(reminders, search)
 
-  useEffect(() => removeSelectedReminders(), [select])
+  useEffect(() => removeSelectedReminders(), [select === false])
 
   return (
     <ScrollView

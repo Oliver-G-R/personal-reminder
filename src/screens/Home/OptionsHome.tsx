@@ -11,7 +11,7 @@ interface IOptionsHome {
     setSelectListReminder: Dispatch<SetStateAction<boolean>>
 }
 export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsHome) => {
-  const { removeAllReminders } = useContext(ReminderControlContext)
+  const { removeAllReminders, reminders } = useContext(ReminderControlContext)
   const { cancelAllPushNotifications } = useContext(PushNotificationContext)
 
   const removeAllRemindersOption = async () => {
@@ -23,7 +23,7 @@ export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsH
   return isOpen
     ? (
         <PopUpModalOptions setIsOpen={setOpen}>
-            <TouchableOpacity onPress={removeAllRemindersOption} >
+            {reminders.length > 0 && <TouchableOpacity onPress={removeAllRemindersOption} >
                 <Icon
                     name="delete"
                     type="material-community"
@@ -32,8 +32,8 @@ export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsH
                     size={30}
                     tvParallaxProperties={undefined} />
                 <Text style={style.optionText} >Eliminar todo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
+            </TouchableOpacity>}
+            {reminders.length > 0 && <TouchableOpacity onPress={() => {
               setSelectListReminder(select => !select)
               setOpen(false)
             }}>
@@ -45,6 +45,16 @@ export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsH
                     size={30}
                     tvParallaxProperties={undefined} />
                 <Text style={style.optionText} >Seleccionar</Text>
+            </TouchableOpacity>}
+            <TouchableOpacity>
+              <Icon
+                name="account-cog"
+                type="material-community"
+                style={style.icon}
+                color="#212837"
+                size={30}
+                tvParallaxProperties={undefined} />
+              <Text style={style.optionText}>Preferencias</Text>
             </TouchableOpacity>
         </PopUpModalOptions>
       )

@@ -6,7 +6,7 @@ export const NoReminders = () => {
         <Image
             source={require('../assets/png/empty.png')}
             style={{
-              height: 400,
+              height: 350,
               width: '100%'
             }}
         />

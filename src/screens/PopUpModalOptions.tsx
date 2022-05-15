@@ -1,5 +1,6 @@
 import { Children, FC, ReactElement, cloneElement, Dispatch, SetStateAction } from 'react'
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Icon } from 'react-native-elements'
 
 interface IPopUpModalOptions {
   setIsOpen: Dispatch<SetStateAction<boolean>>
@@ -23,7 +24,13 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }
                 style={style.donebtn}
                 onPress={() => setIsOpen(false)}
                 activeOpacity={0.8}>
-                <Text style={style.doneText}>Listo</Text>
+                <Icon
+                  name="close"
+                  type="material-community"
+                  color="#21283795"
+                  size={30}
+                  tvParallaxProperties={undefined}
+                />
               </TouchableOpacity>
               <ScrollView
                 showsVerticalScrollIndicator={false}
@@ -38,7 +45,6 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }
                     })
                   })
                 }
-
               </ScrollView>
           </View>
        </View>
@@ -49,7 +55,6 @@ export const PopUpModalOptions:FC<IPopUpModalOptions> = ({ setIsOpen, children }
 const style = StyleSheet.create({
   container: {
     width: '100%',
-    height: '30%',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     padding: 15,
@@ -65,7 +70,10 @@ const style = StyleSheet.create({
   },
 
   donebtn: {
-    width: 60
+    width: 30,
+    borderRadius: 15,
+    marginBottom: 10,
+    backgroundColor: '#e1e1e1'
   },
 
   option: {

@@ -1,6 +1,6 @@
 import { useEffect, ReactNode, useState, useContext } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TextInputFocusEventData } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TextInputFocusEventData, TouchableOpacity, Platform } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { FAB } from '@components/FAB'
 import { GridCard } from '@components/GridCard'
@@ -9,6 +9,7 @@ import { ContainerFAB } from '@components/ContainerFAB'
 import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { OptionsHome } from './OptionsHome'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
+import { Search } from '@components/Search'
 
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 
@@ -16,7 +17,7 @@ export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectListReminder, setSelectListReminder] = useState(false)
-  const { reminders } = useContext(ReminderControlContext)
+  const { reminders, removeAllSelectedRemindersById, selectedReminders } = useContext(ReminderControlContext)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
     const yOffset = e.nativeEvent.contentOffset.y
@@ -37,29 +38,47 @@ export const Home = ({ navigation }:IHome) => {
     }
   }
 
-  useEffect(() => { selectListReminder && setSelectListReminder(false) }, [reminders])
+  useEffect(() => {
+    selectListReminder && setSelectListReminder(false)
+  }, [reminders])
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft (props: HeaderButtonProps): ReactNode {
-        return (
-        <Icon
-          name="dots-horizontal"
-          type="material-community"
-          color={props.tintColor}
-          size={30}
-          tvParallaxProperties={undefined}
-          onPress={() => setOpen(true)}
-        />
+        return !selectListReminder
+          ? (
+          <Icon
+            name="dots-horizontal"
+            type="material-community"
+            color={props.tintColor}
+            size={30}
+            tvParallaxProperties={undefined}
+            onPress={() => setOpen(true)}
+          />
+            )
+          : (
+              <TouchableOpacity onPress={() => setSelectListReminder(false)}>
+                <Text style={style.optionTextHeader}>Listo</Text>
+              </TouchableOpacity>
+            )
+      },
+      headerRight (props: HeaderButtonProps):ReactNode {
+        return selectListReminder && (
+          <TouchableOpacity onPress={() => removeAllSelectedRemindersById()}>
+            <Text style={style.optionTextHeader}>Eliminar</Text>
+          </TouchableOpacity>
         )
       },
-      headerSearchBarOptions: {
-        placeholder: 'Buscar',
-        onChangeText: (e:NativeSyntheticEvent<TextInputFocusEventData>) =>
-          setSearch(e.nativeEvent.text)
-      }
-    }
-    )
-  }, [])
+      headerSearchBarOptions: Platform.OS === 'ios'
+        ? {
+            placeholder: 'Buscar',
+
+            onChangeText: (e:NativeSyntheticEvent<TextInputFocusEventData>) =>
+              setSearch(e.nativeEvent.text)
+          }
+        : undefined
+    })
+  }, [selectListReminder, selectedReminders])
 
   return (
     <>
@@ -70,6 +89,7 @@ export const Home = ({ navigation }:IHome) => {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
         >
+          {Platform.OS === 'android' && <Search setSearch={setSearch} />}
           <View style={style.contentMessageWelcome}>
             <Text style={style.title}>
               Todos tus recordatorios en un solo lugar.
@@ -85,13 +105,13 @@ export const Home = ({ navigation }:IHome) => {
         setSelectListReminder={setSelectListReminder}
         isOpen={isOpen}
       />
-      <ContainerFAB>
+      {!selectListReminder && <ContainerFAB>
         <FAB
           onPress={() => navigation.navigate('AddReminder') }
           name="plus"
           type="material-community"
         />
-      </ContainerFAB>
+      </ContainerFAB>}
     </>
   )
 }
@@ -99,7 +119,7 @@ export const Home = ({ navigation }:IHome) => {
 const style = StyleSheet.create({
   contentMessageWelcome: {
     width: '90%',
-    marginBottom: 20
+    marginBottom: 15
   },
 
   title: {
@@ -112,6 +132,12 @@ const style = StyleSheet.create({
     fontSize: 20,
     color: '#212837',
     marginTop: 10
+  },
+
+  optionTextHeader: {
+    fontSize: 17,
+    color: '#212837',
+    fontWeight: 'bold'
   }
 
 })
