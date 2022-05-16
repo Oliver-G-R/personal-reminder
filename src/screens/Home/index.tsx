@@ -10,6 +10,7 @@ import { HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript
 import { OptionsHome } from './OptionsHome'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
 import { Search } from '@components/Search'
+import { PreferencesContext } from '../../context/PreferencesProvider'
 
 interface IHome extends NativeStackScreenProps<RootStackParamList, 'Home'> {}
 
@@ -17,6 +18,7 @@ export const Home = ({ navigation }:IHome) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectListReminder, setSelectListReminder] = useState(false)
+  const { viewRminder: { typeViewReminder } } = useContext(PreferencesContext)
   const { reminders, removeAllSelectedRemindersById, selectedReminders } = useContext(ReminderControlContext)
 
   const onScrollEvent = (e:NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -96,7 +98,7 @@ export const Home = ({ navigation }:IHome) => {
             </Text>
           </View>
           <GridCard
-            typeLayout="list"
+            typeLayout={typeViewReminder}
             select={selectListReminder}
             search={search}/>
       </ScrollView>

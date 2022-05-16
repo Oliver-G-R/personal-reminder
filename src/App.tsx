@@ -1,9 +1,10 @@
+import { FC } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StackNavigation } from './MyStackNavigation'
 import { ColorThemeReminderProvider } from '@context/ThemeColorContext'
 import { ReminderControlProvider } from '@context/ReminderControlProvider'
 import { PushNotificationProvider } from '@context/PushNotificationProvider'
-import { FC } from 'react'
+import { PreferencesProvider } from '@context/PreferencesProvider'
 
 export default function App () {
   return (
@@ -16,10 +17,12 @@ export default function App () {
 
 const AppState:FC = ({ children }) => (
     <PushNotificationProvider>
-      <ReminderControlProvider>
-        <ColorThemeReminderProvider>
-          {children}
-        </ColorThemeReminderProvider>
-      </ReminderControlProvider>
+     <PreferencesProvider>
+        <ReminderControlProvider>
+          <ColorThemeReminderProvider>
+            {children}
+          </ColorThemeReminderProvider>
+        </ReminderControlProvider>
+     </PreferencesProvider>
     </PushNotificationProvider>
 )

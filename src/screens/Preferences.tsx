@@ -1,13 +1,17 @@
+import { useContext } from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, Platform, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { globalStyle } from '../constants/globalStyles'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@Types/NavigationType'
 import { CheckBox } from '@components/CheckBox'
+import { PreferencesContext } from '@context/PreferencesProvider'
 
 interface IPreferences extends NativeStackScreenProps<RootStackParamList, 'Preferences'> {}
 
 export const Preferences = ({ navigation }:IPreferences) => {
+  const { viewRminder: { setTypeViewReminder, typeViewReminder } } = useContext(PreferencesContext)
+
   return (
     <SafeAreaView style={style.container}>
         <Text style={[style.title, globalStyle.container]}>Preferencias 🛠️</Text>
@@ -30,19 +34,30 @@ export const Preferences = ({ navigation }:IPreferences) => {
 
               <View style={style.containerSelectLayout}>
                 <TouchableOpacity
+                  onPress={() => setTypeViewReminder('list')}
                   activeOpacity={0.7}
                   style={style.contentLayoutList}>
-                  <View style={style.layoutListItem}>
+                  <View
+                    style={[style.layoutListItem, {
+                      backgroundColor: typeViewReminder === 'list' ? '#FF7461' : '#dfe2e4'
+                    }]}>
                   </View>
-                  <View style={style.layoutListItem}>
+                  <View
+                    style={[style.layoutListItem, {
+                      backgroundColor: typeViewReminder === 'list' ? '#FF7461' : '#dfe2e4'
+                    }]}>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  onPress={() => setTypeViewReminder('grid')}
                   activeOpacity={0.7}
                   style={style.contentLayoutGrid}>
-                  <View style={style.layoutGridItem}>
+                  <View style={[style.layoutGridItem, {
+                    backgroundColor: typeViewReminder === 'grid' ? '#FF7461' : '#dfe2e4'
+                  }]}>
                   </View>
                   <View style={[style.layoutGridItem, {
+                    backgroundColor: typeViewReminder === 'grid' ? '#FF7461' : '#dfe2e4',
                     marginTop: 10,
                     marginRight: 0
                   }]}>
@@ -191,7 +206,6 @@ const style = StyleSheet.create({
     flexDirection: 'row'
   },
   layoutListItem: {
-    backgroundColor: '#dfe2e4',
     marginBottom: 10,
     height: 30,
     borderRadius: 10,
@@ -199,7 +213,6 @@ const style = StyleSheet.create({
   },
 
   layoutGridItem: {
-    backgroundColor: '#dfe2e4',
     height: 70,
     marginRight: 5,
     borderRadius: 10,
