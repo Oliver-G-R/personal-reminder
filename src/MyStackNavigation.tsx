@@ -22,10 +22,10 @@ export const StackNavigation = () => {
             headerTitleAlign: 'left',
 
             headerStyle: {
-              backgroundColor: '#F6FAFB'
+              backgroundColor: '#F6F6F8'
             },
             contentStyle: {
-              backgroundColor: '#F6FAFB',
+              backgroundColor: '#F6F6F8',
               paddingHorizontal: 15,
               paddingTop: 10
             }
@@ -53,7 +53,12 @@ export const StackNavigation = () => {
               component={AddReminder} />
           <Stack.Screen
             options={{
-              title: 'Preferencias'
+              headerShown: false,
+              contentStyle: {
+                padding: 0,
+                backgroundColor: '#F6F6F8',
+                paddingTop: 10
+              }
             }}
             name="Preferences"
             component={Preferences}
