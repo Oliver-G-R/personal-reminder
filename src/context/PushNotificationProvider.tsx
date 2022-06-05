@@ -1,5 +1,5 @@
 import { createContext, FC, useEffect } from 'react'
-import { Alert } from 'react-native'
+import { Alert, Platform } from 'react-native'
 import * as Notifications from 'expo-notifications'
 import { IReminderData } from '@Types/TReminder'
 import { reggisertForPushNotifications } from '@helpers/notiffications'
@@ -37,22 +37,33 @@ export const PushNotificationProvider:FC = ({ children }) => {
   const scheduleNotification = async (data:IReminderData):Promise<string | undefined > => {
     const { date, time, title, fullReminder, color: { colorTheme } } = data
 
+    const content = {
+      title,
+      body: fullReminder,
+      color: colorTheme,
+      sound: Platform.OS === 'android' ? undefined : 'default'
+    }
+
     try {
-      return await Notifications.scheduleNotificationAsync({
-        content: {
-          title,
-          body: fullReminder,
-          color: colorTheme,
-          sound: 'default'
-        },
-        trigger: {
-          day: date?.getDate(),
-          month: date?.getMonth() as number + 1,
-          year: date?.getFullYear(),
-          hour: time?.getHours(),
-          minute: time?.getMinutes()
-        }
-      })
+      return Platform.OS === 'ios'
+        ? await Notifications.scheduleNotificationAsync({
+          content,
+          trigger: {
+            day: date?.getDate(),
+            month: date?.getMonth() as number + 1,
+            year: date?.getFullYear(),
+            hour: time?.getHours(),
+            minute: time?.getMinutes()
+          }
+        })
+        : await Notifications.scheduleNotificationAsync({
+          content,
+          trigger: {
+            hour: time?.getHours(),
+            minute: time?.getMinutes(),
+            repeats: true
+          }
+        })
     } catch (error) {
       Alert.alert('Error', 'No se pudo agendar la notificación')
     }

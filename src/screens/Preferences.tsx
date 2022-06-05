@@ -66,7 +66,7 @@ export const Preferences = ({ navigation }:IPreferences) => {
               </View>
 
             </View>
-            <View style={style.contentPreferenceItem}>
+            {/* <View style={style.contentPreferenceItem}>
               <View style={style.contentNamePreference}>
                 <Icon
                   name="brightness-4"
@@ -102,7 +102,7 @@ export const Preferences = ({ navigation }:IPreferences) => {
                 />
               </View>
 
-            </View>
+            </View> */}
           </View>
 
         </ScrollView>

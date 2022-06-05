@@ -1,8 +1,9 @@
 import { FC } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '@Types/NavigationType'
 import { IReminderData } from '@Types/TReminder'
+import moment from 'moment'
 
 interface ICardHomeProps {
   title: IReminderData['title'];
@@ -41,11 +42,7 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
             <Text style={style.infoData}>
               {
                /* transform to time 12 hor format */
-                new Date(time).toLocaleTimeString('es-ES', {
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  hour12: true
-                })
+                moment(time, ['HH.mm']).format('hh:mm a')
               }
             </Text>
           </View>}

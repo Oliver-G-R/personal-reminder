@@ -1,5 +1,5 @@
 import { FC, useContext, SetStateAction, Dispatch } from 'react'
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Share, Platform } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ColorThemeReminderContext } from '@context/ThemeColorContext'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
@@ -8,6 +8,7 @@ import { NavigationProps } from '@Types/NavigationType'
 import { PopUpModalOptions } from '../../components/PopUpModalOptions'
 import { PushNotificationContext } from '@context/PushNotificationProvider'
 import { IReminderData } from '@Types/TReminder'
+import moment from 'moment'
 interface IOptionsAddReminder {
   setOpenPicker: Dispatch<SetStateAction<boolean>>
   currentId?: string
@@ -38,17 +39,13 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
       year: 'numeric'
     })
 
-    const convertTimeString = new Date(finReminder.time as Date).toLocaleTimeString('es-ES', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    })
+    const convertTimeString = moment(finReminder.time, ['HH.mm']).format('hh:mm a')
 
     const template = `
     ${finReminder.fullReminder}
 
-    🕐 ${convertDateString}
-    📅 ${convertTimeString}
+    📅 ${convertDateString}
+    🕐 ${convertTimeString}
     `
 
     try {
@@ -116,7 +113,7 @@ export const OptionsAddReminder:FC<IOptionsAddReminder> = ({ setOpenPicker, curr
                     )}
                 />
           </TouchableOpacity>
-          <TouchableOpacity
+         <TouchableOpacity
             onPress={() => {
               setModePicker('date')
               setOpenPicker(true)

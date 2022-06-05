@@ -126,7 +126,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       id: getUUID(),
       title: reminder.title,
       fullReminder: reminder.fullReminder,
-      date: new Date(),
+      date: reminder.date,
       time: reminder.time,
       color,
       identifierNotification: undefined
