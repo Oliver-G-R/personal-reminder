@@ -121,6 +121,19 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
     })
   }
 
+  const programPushNotification = async (reminderObjet:IReminderData) => {
+    const identifier = await scheduleNotification(reminderObjet)
+    return identifier
+  }
+
+  const canceNotification = async (reminderObjet:IReminderData) => {
+    await cancelPushNotification(currentidentifierNotification as string)
+
+    // Actualizando el recordatorio junto con su identificador de notificación
+    const identifier = await scheduleNotification(reminderObjet)
+    return identifier
+  }
+
   const saveReminder = async () => {
     const reminderObjet:IReminderData = {
       id: getUUID(),
@@ -134,31 +147,37 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
 
     if (reminderObjet.title.trim().length !== 0) {
       if (existCurrentId) {
-        if (reminderObjet.date !== null && reminderObjet.time !== null) {
+        if (reminderObjet.date !== null && reminderObjet.time !== null && Platform.OS === 'ios') {
           if (validateDate(reminderObjet.date as Date)) {
-            await cancelPushNotification(currentidentifierNotification as string)
-
-            // Actualizando el recordatorio junto con su identificador de notificación
-            const identifier = await scheduleNotification(reminderObjet)
-            reminderObjet.identifierNotification = identifier
+            reminderObjet.identifierNotification = reminderObjet.identifierNotification
+              ? await canceNotification(reminderObjet)
+              : await programPushNotification(reminderObjet)
 
             updateReminder(existCurrentId, reminderObjet)
             navigation.navigate('Home')
           } else Alert.alert('Error', 'La fecha no puede ser menor a la actual')
+        } else if (reminderObjet.time !== null && Platform.OS === 'android') {
+          reminderObjet.identifierNotification = reminderObjet.identifierNotification
+            ? await canceNotification(reminderObjet)
+            : await programPushNotification(reminderObjet)
+
+          updateReminder(existCurrentId, reminderObjet)
+          navigation.navigate('Home')
         } else {
           updateReminder(existCurrentId, reminderObjet)
           navigation.navigate('Home')
         }
       } else {
-        if (reminderObjet.date !== null && reminderObjet.time !== null) {
+        if (reminderObjet.date !== null && reminderObjet.time !== null && Platform.OS === 'ios') {
           if (validateDate(reminderObjet.date as Date)) {
-            const identifier = await scheduleNotification(reminderObjet)
-            reminderObjet.identifierNotification = identifier
-
+            reminderObjet.identifierNotification = await programPushNotification(reminderObjet)
             createReminder(reminderObjet)
-
             navigation.navigate('Home')
           } else Alert.alert('Error', 'La fecha no puede antes de la actual')
+        } else if (reminderObjet.time !== null && Platform.OS === 'android') {
+          reminderObjet.identifierNotification = await programPushNotification(reminderObjet)
+          createReminder(reminderObjet)
+          navigation.navigate('Home')
         } else {
           createReminder(reminderObjet)
           navigation.navigate('Home')

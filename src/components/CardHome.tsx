@@ -15,6 +15,7 @@ interface ICardHomeProps {
 
 export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) => {
   const navigation = useNavigation<NavigationProps>()
+  console.log(date, time)
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -29,11 +30,7 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
             <Text style={style.icon}>📅</Text>
             <Text style={style.infoData}>
               {
-                new Date(date).toLocaleDateString('es-ES', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
-                })
+                moment(new Date(date)).format('DD/MM/YYYY')
               }
             </Text>
           </View>}
@@ -42,7 +39,8 @@ export const CardHome:FC<ICardHomeProps> = ({ title, color, time, id, date }) =>
             <Text style={style.infoData}>
               {
                /* transform to time 12 hor format */
-                moment(time, ['HH.mm']).format('hh:mm a')
+                moment(new Date(time), ['HH.mm']).format('hh:mm a')
+
               }
             </Text>
           </View>}

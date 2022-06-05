@@ -74,10 +74,12 @@ export const PushNotificationProvider:FC = ({ children }) => {
    * @param {string} identifier - Identificador de la notificación
    */
   const cancelPushNotification = async (identifier:string):Promise<void> => {
+    console.log('cancelPushNotification', identifier)
     try {
       await Notifications.cancelScheduledNotificationAsync(identifier)
     } catch (error) {
       Alert.alert('Error', 'No se pudo cancelar la notificación')
+      console.log(error)
     }
   }
 
