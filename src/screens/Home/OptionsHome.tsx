@@ -2,7 +2,7 @@ import { PopUpModalOptions } from '../../components/PopUpModalOptions'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Dispatch, SetStateAction, useContext } from 'react'
 import { ReminderControlContext } from '@context/ReminderControlProvider'
-import { PushNotificationContext } from '@context/PushNotificationProvider'
+
 import { Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '@Types/NavigationType'
@@ -14,12 +14,12 @@ interface IOptionsHome {
 }
 export const OptionsHome = ({ setOpen, isOpen, setSelectListReminder }:IOptionsHome) => {
   const { removeAllReminders, reminders } = useContext(ReminderControlContext)
-  const { cancelAllPushNotifications } = useContext(PushNotificationContext)
+
   const { navigate } = useNavigation<NavigationProps>()
 
   const removeAllRemindersOption = async () => {
     removeAllReminders()
-    await cancelAllPushNotifications()
+
     setOpen(false)
   }
 

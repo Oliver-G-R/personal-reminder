@@ -1,7 +1,6 @@
 import { createContext, FC, useEffect, useState, useContext } from 'react'
 import { useAsyncStorage } from '@hooks/useAsyncStorage'
 import { IReminderData } from '@Types/TReminder'
-import { PushNotificationContext } from './PushNotificationProvider'
 
 interface IReminderControlContext {
     createReminder: (reminder:IReminderData) => void
@@ -31,7 +30,6 @@ export const ReminderControlContext = createContext<IReminderControlContext>(def
 
 export const ReminderControlProvider:FC = ({ children }) => {
   const [reminders, setReminders] = useAsyncStorage<IReminderData[]>({ key: 'reminder', initialValue: [] })
-  const { cancelPushNotification } = useContext(PushNotificationContext)
 
   const [selectedReminders, setSelectedReminders] = useState<IReminderData[]>([])
 
@@ -50,10 +48,6 @@ export const ReminderControlProvider:FC = ({ children }) => {
   const removeSelectedReminders = () => setSelectedReminders([])
 
   const removeAllSelectedRemindersById = async () => {
-    const exitIdentifiers = selectedReminders.filter(item => item.identifierNotification !== undefined)
-    if (exitIdentifiers) {
-      await Promise.all(exitIdentifiers.map(item => cancelPushNotification(item.identifierNotification as string)))
-    }
     setReminders(reminders.filter(item => !selectedReminders.some(itemSelected => itemSelected.id === item.id)))
   }
 

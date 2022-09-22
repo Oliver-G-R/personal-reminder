@@ -13,7 +13,6 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { RootStackParamList } from '@Types/NavigationType'
 import { IReminderData, IstateReminder } from '@Types/TReminder'
 import { ContainerFAB } from '@components/ContainerFAB'
-import { PushNotificationContext } from '@context/PushNotificationProvider'
 
 interface IAddReminder extends NativeStackScreenProps<RootStackParamList, 'AddReminder'> {}
 
@@ -32,7 +31,6 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
   const [modePicker, setModePicker] = useState<'date' | 'time'>('date')
   const [currentidentifierNotification, setCurrentIdentifierNotification] = useState<string|undefined>()
 
-  const { scheduleNotification, cancelPushNotification } = useContext(PushNotificationContext)
   const { createReminder, reminders: remindersData, updateReminder } = useContext(ReminderControlContext)
   const { color, setColorThemeReminder } = useContext(ColorThemeReminderContext)
 
@@ -82,7 +80,7 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
     if (currentId) {
       setExistCurrentId(currentId)
       const { date, time, color, identifierNotification, ...rest } = remindersData.find(rmd => rmd.id === currentId) as IReminderData
-      setCurrentIdentifierNotification(identifierNotification)
+
       setColorThemeReminder(color)
       setReminder({
         ...rest,
@@ -121,19 +119,6 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
     })
   }
 
-  const programPushNotification = async (reminderObjet:IReminderData) => {
-    const identifier = await scheduleNotification(reminderObjet)
-    return identifier
-  }
-
-  const canceNotification = async (reminderObjet:IReminderData) => {
-    await cancelPushNotification(currentidentifierNotification as string)
-
-    // Actualizando el recordatorio junto con su identificador de notificación
-    const identifier = await scheduleNotification(reminderObjet)
-    return identifier
-  }
-
   const saveReminder = async () => {
     const reminderObjet:IReminderData = {
       id: getUUID(),
@@ -149,18 +134,10 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       if (existCurrentId) {
         if (reminderObjet.date !== null && reminderObjet.time !== null && Platform.OS === 'ios') {
           if (validateDate(reminderObjet.date as Date)) {
-            reminderObjet.identifierNotification = reminderObjet.identifierNotification
-              ? await canceNotification(reminderObjet)
-              : await programPushNotification(reminderObjet)
-
             updateReminder(existCurrentId, reminderObjet)
             navigation.navigate('Home')
           } else Alert.alert('Error', 'La fecha no puede ser menor a la actual')
         } else if (reminderObjet.time !== null && Platform.OS === 'android') {
-          reminderObjet.identifierNotification = reminderObjet.identifierNotification
-            ? await canceNotification(reminderObjet)
-            : await programPushNotification(reminderObjet)
-
           updateReminder(existCurrentId, reminderObjet)
           navigation.navigate('Home')
         } else {
@@ -170,12 +147,10 @@ export const AddReminder = ({ navigation, route }:IAddReminder) => {
       } else {
         if (reminderObjet.date !== null && reminderObjet.time !== null && Platform.OS === 'ios') {
           if (validateDate(reminderObjet.date as Date)) {
-            reminderObjet.identifierNotification = await programPushNotification(reminderObjet)
             createReminder(reminderObjet)
             navigation.navigate('Home')
           } else Alert.alert('Error', 'La fecha no puede antes de la actual')
         } else if (reminderObjet.time !== null && Platform.OS === 'android') {
-          reminderObjet.identifierNotification = await programPushNotification(reminderObjet)
           createReminder(reminderObjet)
           navigation.navigate('Home')
         } else {
